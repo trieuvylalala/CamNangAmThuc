@@ -218,6 +218,11 @@ public class RegistrationActivity extends AppCompatActivity {
                     editxatnhan.requestFocus();
                     return;
                 }
+                if (!sendcode.equals(code)){
+                    editxatnhan.setError("Mã không đúng");
+                    editxatnhan.requestFocus();
+                    return;
+                }
                 progressBar.setVisibility(View.VISIBLE);
                     verycode(code);
                     b.dismiss();
@@ -237,7 +242,6 @@ public class RegistrationActivity extends AppCompatActivity {
             String code = phoneAuthCredential.getSmsCode();
             if(code != null){
                 editxatnhan.setText(code);
-                progressBar.setVisibility(View.VISIBLE);
                 verycode(code);
             }
         }

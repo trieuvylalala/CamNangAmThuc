@@ -18,6 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rey.material.widget.CheckBox;
+
+import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
     EditText editloginemail,editloginpassword;
@@ -25,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference listuser;
     ProgressDialog pDialog;
+    CheckBox checkBoxghinho;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         editloginpassword = (EditText)findViewById(R.id.edtpasswordlogin);
         bntlogin = (Button) findViewById(R.id.btnlogin);
         bntchanreque = (Button) findViewById(R.id.btnLinkToLoginScreen);
+        checkBoxghinho = (CheckBox) findViewById(R.id.checkghinho);
+        Paper.init(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
         listuser = firebaseDatabase.getReference("Users");
                 bntchanreque.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                 bntlogin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (checkBoxghinho.isChecked()){
+                            Paper.book().write(Common.USE_KEY,editloginemail.getText().toString());
+                            Paper.book().write(Common.PAW_KEY,editloginpassword.getText().toString());
+                        }
                         pDialog = new ProgressDialog(LoginActivity.this);
                         pDialog.setTitle("Đăng nhập");
                         pDialog.setMessage("Vui lòng đợi...");
@@ -55,24 +65,28 @@ public class LoginActivity extends AppCompatActivity {
                                 pDialog.dismiss();
                                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                     Users users = postSnapshot.getValue(Users.class);
-
-                                    if (users.getEmail().equals(editloginemail.getText().toString()) &&
-                                            users.getPassword().equals(editloginpassword.getText().toString())
-                                            && users.getRole().equalsIgnoreCase("admin")) {
-                                        Intent adminIntent = new Intent(LoginActivity.this, HomeAdmin.class);
-                                        Common.userten  = users;
-                                        adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(adminIntent);
-                                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    }
-                                    if (users.getEmail().equals(editloginemail.getText().toString()) &&
-                                            users.getPassword().equals(editloginpassword.getText().toString())
-                                            && users.getRole().equalsIgnoreCase("user")) {
-                                        Intent userIntent = new Intent(LoginActivity.this, HomeUsers.class);
-                                        Common.userten  = users;
-                                        userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(userIntent);
-                                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    if (!users.getEmail().equals(editloginemail.getText().toString()) &&
+                                            !users.getPassword().equals(editloginpassword.getText().toString())) {
+                                        Toast.makeText(LoginActivity.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        if (users.getEmail().equals(editloginemail.getText().toString()) &&
+                                                users.getPassword().equals(editloginpassword.getText().toString())
+                                                && users.getRole().equalsIgnoreCase("admin")) {
+                                            Intent adminIntent = new Intent(LoginActivity.this, HomeAdmin.class);
+                                            Common.userten = users;
+                                            adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(adminIntent);
+                                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                        }
+                                        if (users.getEmail().equals(editloginemail.getText().toString()) &&
+                                                users.getPassword().equals(editloginpassword.getText().toString())
+                                                && users.getRole().equalsIgnoreCase("user")) {
+                                            Intent userIntent = new Intent(LoginActivity.this, HomeUsers.class);
+                                            Common.userten = users;
+                                            userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(userIntent);
+                                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             }

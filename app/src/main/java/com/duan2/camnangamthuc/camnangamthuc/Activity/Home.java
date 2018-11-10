@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -42,13 +43,19 @@ import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
 import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.MenuHome;
+import com.duan2.camnangamthuc.camnangamthuc.Model.Users;
 import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import io.paperdb.Paper;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener{
@@ -64,6 +71,7 @@ public class Home extends AppCompatActivity
     ProgressDialog pDialog;
     LinearLayout gvcamnang,gvcongdong;
     AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +91,14 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Paper.init(this);
+        String email= Paper.book().read(Common.USE_KEY);
+        String password= Paper.book().read(Common.PAW_KEY);
+        if(email != null && password !=null){
+            if(!email.isEmpty() && !password.isEmpty()){
+                loginghinho(email,password);
+            }
+        }
         //khai báo listview menu
         loginIon = BitmapFactory.decodeResource(this.getResources(),R.drawable.login);
         listArray.add(new MenuHome("Đăng nhập tài khoảng",loginIon));
@@ -147,6 +163,52 @@ public class Home extends AppCompatActivity
         }else {
             CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
         }
+    }
+    private void loginghinho(final String email , final String password){
+       final FirebaseDatabase firebaseDatabase;
+       final DatabaseReference listuser;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        listuser = firebaseDatabase.getReference("Users");
+        pDialog = new ProgressDialog(Home.this);
+        pDialog.setTitle("Đăng nhập");
+        pDialog.setMessage("Vui lòng đợi...");
+        pDialog.show();
+        listuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pDialog.dismiss();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Users users = postSnapshot.getValue(Users.class);
+                    if (!users.getEmail().equals(email) &&
+                            !users.getPassword().equals(password)) {
+                        Toast.makeText(Home.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (users.getEmail().equals(email) &&
+                                users.getPassword().equals(password)
+                                && users.getRole().equalsIgnoreCase("admin")) {
+                            Intent adminIntent = new Intent(Home.this, HomeAdmin.class);
+                            Common.userten = users;
+                            adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(adminIntent);
+                            Toast.makeText(Home.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        }
+                        if (users.getEmail().equals(email) &&
+                                users.getPassword().equals(password)
+                                && users.getRole().equalsIgnoreCase("user")) {
+                            Intent userIntent = new Intent(Home.this, HomeUsers.class);
+                            Common.userten = users;
+                            userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(userIntent);
+                            Toast.makeText(Home.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 //lấy dữ liệu tên và img đổ ra màng hình
     private void loadMenu() {

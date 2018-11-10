@@ -43,6 +43,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import io.paperdb.Paper;
+
 public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener {
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
@@ -80,6 +82,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         imgloginad  = (ImageView)findViewById(R.id.imgloginadmin) ;
         txtloginad.setText(Common.userten.getName());
         Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginad);
+        Paper.init(this);
         //khai báo listview menu
         quanlitktkIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.qltk);
         listArray.add(new MenuHome("Quản lý tài khoảng", quanlitktkIcon));
@@ -230,6 +233,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
             case 2:
                 break;
             case 4:
+                Paper.book().destroy();
                 Intent longoutent = new Intent(HomeAdmin.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(longoutent);

@@ -37,6 +37,7 @@ public class LoadSeachActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     String KetGet="";
+    TextView txtthongtintile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +83,7 @@ public class LoadSeachActivity extends AppCompatActivity {
     private void ChayToolBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        TextView txtthongtintile = (TextView)findViewById(R.id.toolbar_title_loadseach);
+        txtthongtintile = (TextView)findViewById(R.id.toolbar_title_loadseach);
         txtthongtintile.setSingleLine(true);
         txtthongtintile.setEllipsize(TextUtils.TruncateAt.END);
         txtthongtintile.setText(KetGet);
@@ -112,28 +113,28 @@ public class LoadSeachActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private void starload(String text){
+    private void starload(final String text){
         Query fireQuery = foodInfomationlist.orderByChild("Name").startAt(text).endAt(text +"\uf8ff");
         adapter = new FirebaseRecyclerAdapter<FoodInfomation, FoodInfomationViewHoder>(FoodInfomation.class,R.layout.item_foodinfomation,FoodInfomationViewHoder.class,
                fireQuery){//tìm kiếm : select * from Food where MenuId
             @Override
             protected void populateViewHolder(FoodInfomationViewHoder viewHolder, FoodInfomation model, int position) {
-                viewHolder.txtInfomationViewName.setText(model.getName());
-                viewHolder.txtInfomationViewInfo.setText(model.getInfomation());
-                viewHolder.txtInfomationViewInfo.setMaxLines(2);
-                viewHolder.txtInfomationViewInfo.setEllipsize(TextUtils.TruncateAt.END);
-                Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.imgFoodInfomationView);
-                final FoodInfomation foodInfomation = model;
-                viewHolder.setItemListener(new ItemClickListerner() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        Intent foodinfoviewIntent = new Intent(LoadSeachActivity.this,FoodInfomationViewActivity.class);
-                        Common.foodinfogetten = foodInfomation;
-                        //lấy id của Category là key,vì vậy lấy key để chỉ item
-                        foodinfoviewIntent.putExtra("FoodInfomationId",adapter.getRef(position).getKey());
-                        startActivity(foodinfoviewIntent);
-                    }
-                });
+                    viewHolder.txtInfomationViewName.setText(model.getName());
+                    viewHolder.txtInfomationViewInfo.setText(model.getInfomation());
+                    viewHolder.txtInfomationViewInfo.setMaxLines(2);
+                    viewHolder.txtInfomationViewInfo.setEllipsize(TextUtils.TruncateAt.END);
+                    Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.imgFoodInfomationView);
+                    final FoodInfomation foodInfomation = model;
+                    viewHolder.setItemListener(new ItemClickListerner() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            Intent foodinfoviewIntent = new Intent(LoadSeachActivity.this, FoodInfomationViewActivity.class);
+                            Common.foodinfogetten = foodInfomation;
+                            //lấy id của Category là key,vì vậy lấy key để chỉ item
+                            foodinfoviewIntent.putExtra("FoodInfomationId", adapter.getRef(position).getKey());
+                            startActivity(foodinfoviewIntent);
+                        }
+                    });
             }
         };
         //set adapter
