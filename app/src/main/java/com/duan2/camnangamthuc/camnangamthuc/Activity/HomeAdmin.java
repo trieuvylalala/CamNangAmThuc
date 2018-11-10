@@ -1,5 +1,6 @@
 package com.duan2.camnangamthuc.camnangamthuc.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,12 +17,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,6 +63,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     LinearLayout gvcamnang, gvcongdong;
     TextView txtloginad;
     ImageView imgloginad;
+    AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,8 +209,43 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
             startActivity(intent);
             finish();
             return true;
+        } if (id == R.id.action_seach) {
+            builder = new AlertDialog.Builder(HomeAdmin.this);
+            builder.setTitle("Nhập tên món cần tìm");
+            builder.setMessage("Viết hoa chữ cái đầu tiên || Nhập tên món phải có dấu");
+            LayoutInflater layoutInflater = HomeAdmin.this.getLayoutInflater();
+            final View sendcode = layoutInflater.inflate(R.layout.item_seach, null);
+            final EditText editseach = (EditText) sendcode.findViewById(R.id.edtseachname);
+            final Button bntthoat = (Button) sendcode.findViewById(R.id.btn_thoat);
+            final Button bnttim = (Button) sendcode.findViewById(R.id.btn_tim);
+            builder.setView(sendcode);
+            final AlertDialog b = builder.create();
+            b.show();
+            bntthoat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    b.dismiss();
+                }
+            });
+            bnttim.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String seach = editseach.getText().toString();
+                    if (seach.isEmpty()) {
+                        editseach.setError("Vui lòng nhập tên cần tim");
+                        editseach.requestFocus();
+                        return;
+                    } else {
+                        Intent foodinfoIntent = new Intent(HomeAdmin.this, LoadSeachActivity.class);
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        foodinfoIntent.putExtra("KeyGet", seach);
+                        startActivity(foodinfoIntent);
+                        b.dismiss();
+                    }
+                }
+            });
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
