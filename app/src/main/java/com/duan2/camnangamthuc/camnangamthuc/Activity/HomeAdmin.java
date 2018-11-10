@@ -53,7 +53,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
-    Bitmap xemdanhgiaIcon, xemtaiveIcon, gopyIcon, huongdanIcon, doimatkhauIon, quanlitktkIcon, xoatkIcon, dangxuatIcon, baivietdadangIcon;
+    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon;
     FirebaseDatabase database;
     DatabaseReference category;
     RecyclerView recyclerView;

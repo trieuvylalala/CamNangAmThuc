@@ -53,7 +53,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
-    Bitmap xemdanhgiaIcon,xemtaiveIcon,gopyIcon,huongdanIcon,doimatkhauIon,thongtintkIcon,xoatkIcon,dangxuatIcon,baivietdadangIcon;
+    Bitmap xemdanhgiaIcon,xemtaiveIcon,gopyIcon,huongdanIcon,doimatkhauIon,thongtintkIcon,dangxuatIcon,baivietdadangIcon;
     FirebaseDatabase database;
     DatabaseReference category;
     RecyclerView recyclerView;
@@ -101,8 +101,6 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
         listArray.add(new MenuHome("Xem tải về",xemtaiveIcon));
         gopyIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.icongmail);
         listArray.add(new MenuHome("Góp ý",gopyIcon));
-        xoatkIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.xoatk);
-        listArray.add(new MenuHome("Xóa tài khoảng",xoatkIcon));
         huongdanIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.huongdan);
         listArray.add(new MenuHome("Hướng dẫn",huongdanIcon));
         dangxuatIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.dangxau);
@@ -303,7 +301,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
             case 5:
                 sendEmail();
                 break;
-            case 8:
+            case 7:
                 Paper.book().destroy();
                 Intent longoutent = new Intent(HomeUsers.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
