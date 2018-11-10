@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "286726568719",
+    "firebase_url": "https://camnangamthuc-5707c.firebaseio.com",
+    "project_id": "camnangamthuc-5707c",
+    "storage_bucket": "camnangamthuc-5707c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286726568719:android:4e7517d3cb19082f",
+        "android_client_info": {
+          "package_name": "com.duan2.camnangamthuc.camnangamthuc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286726568719-hmhu7duu0mpkeedqstv3960e5n1j5rmd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duan2.camnangamthuc.camnangamthuc",
+            "certificate_hash": "5623fdea4662db3e6a9c0d1cb630c5b1eb1efa9a"
+          }
+        },
+        {
+          "client_id": "286726568719-2siaile65um57fsjh0rnfvdtdgcmojmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlBIX7EWXOPD1VVANkVSnqkbfeUXKnBaY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286726568719-2siaile65um57fsjh0rnfvdtdgcmojmq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
