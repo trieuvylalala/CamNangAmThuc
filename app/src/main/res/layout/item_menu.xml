@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/menu_name"
         android:textColor="@android:color/white"
-        android:shadowColor="#004d40"
+        android:shadowColor="@color/colorPrimary"
         android:background="@color/colorlayBackgroud"
         android:text="Name of Menu"
         android:textSize="16dp"

@@ -127,7 +127,7 @@ public class FoodInfomationActivity extends AppCompatActivity {
                 viewHolder.txtInfomationViewInfo.setEllipsize(TextUtils.TruncateAt.END);
                 Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.imgFoodInfomationView);
                 txtthongtintile.setText(Common.foodgetten.getName());
-                txtthongtintile.setMaxLines(2);
+                txtthongtintile.setSingleLine(true);
                 txtthongtintile.setEllipsize(TextUtils.TruncateAt.END);
                 final FoodInfomation foodInfomation = model;
                 viewHolder.setItemListener(new ItemClickListerner() {

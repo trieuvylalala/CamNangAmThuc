@@ -43,9 +43,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Cẩm Nang"
+                    android:text="@string/hintcamnang"
                     android:textStyle="bold"
-                    android:textColor="#000000" />
+                    android:textColor="@color/colortext" />
             </LinearLayout>
         </LinearLayout>
 
@@ -81,8 +81,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:textStyle="bold"
-                    android:text="Cộng Đồng"
-                    android:textColor="#000000" />
+                    android:text="@string/titlecongdong"
+                    android:textColor="@color/colortext" />
 
             </LinearLayout>
         </LinearLayout>

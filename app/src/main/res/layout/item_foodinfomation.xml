@@ -38,7 +38,7 @@
                     android:id="@+id/txttitle"
                     android:layout_margin="5dp"
                     android:textStyle="bold"
-                    android:textColor="#000"/>
+                    android:textColor="@color/colortext"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="5dp"
                     android:layout_width="match_parent"
-                    android:background="#000"
+                    android:background="@color/colortext"
                     android:layout_height="1dp"/>
             </LinearLayout>
         </LinearLayout>

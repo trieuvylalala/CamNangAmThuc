@@ -1,9 +1,30 @@
 <resources>
     <string name="app_name">Cẩm Nang Ẩm Thực</string>
     <string name="title_activity_home">Home</string>
-
+    <string name="title_activity_homeadmin">Home Admin</string>
+    <string name="title_activity_homeuse">Home User</string>
+    <string name="nameapp">Cẩm nang ẩm thực</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="hintemail">Email</string>
+    <string name="hintpassword">Mật khẩu</string>
     <string name="action_home">Quay về trang chính</string>
+    <string name="check">Ghi nhớ đăng nhập</string>
+    <string name="bnt_dangnhap">Đăng nhập</string>
+    <string name="bnt_dangkytk">Đăng ký tài khoảng</string>
+    <string name="bnt_dangky">Đăng ký</string>
+    <string name="hintsdt">Số điện thoại</string>
+    <string name="hinthoten">Họ tên</string>
+    <string name="hintbacbuoc">( Bắt buộc )</string>
+    <string name="chonanh">Chọn ảnh đại diện</string>
+    <string name="titlecongdong">Cộng đồng</string>
+    <string name="hintcamnang">Cẩm nang</string>
+    <string name="hinttt">Vui lòng đăng nhập tài khoảng</string>
+    <string name="hinttx">Để xem bài đăng</string>
+    <string name="hintviewname">Tên menu</string>
+    <string name="tim">Tìm</string>
+    <string name="thoat">Thoát</string>
+    <string name="hintseach">Nhập tên món cần tìm</string>
+    <string name="xn">Xát nhận</string>
+    <string name="maxn">Mã xát nhận</string>
 </resources>

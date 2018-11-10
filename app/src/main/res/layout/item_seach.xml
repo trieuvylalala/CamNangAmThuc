@@ -17,7 +17,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/seachedit"
         android:drawableStart="@drawable/ic_search_black_24dp"
-        android:hint="Nhập tên cần tìm"
+        android:hint="@string/hintseach"
         android:inputType="text"
         android:padding="7dp" />
 
@@ -35,9 +35,9 @@
             android:layout_height="40dp"
             android:background="@android:color/white"
             android:clickable="true"
-            android:text="Thoát"
+            android:text="@string/thoat"
             android:textAllCaps="false"
-            android:textColor="#5DBCD2"
+            android:textColor="@color/coloroshawtext"
             android:textStyle="bold" />
 
         <Button
@@ -47,9 +47,9 @@
             android:layout_marginLeft="5dp"
             android:background="@android:color/white"
             android:clickable="true"
-            android:text="Tìm"
+            android:text="@string/tim"
             android:textAllCaps="false"
-            android:textColor="#5DBCD2"
+            android:textColor="@color/coloroshawtext"
             android:textStyle="bold" />
     </LinearLayout>
 

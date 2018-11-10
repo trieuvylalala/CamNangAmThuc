@@ -23,7 +23,7 @@
                 android:id="@+id/add_user_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đăng nhập"
+                android:text="@string/bnt_dangnhap"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:layout_gravity="center" />
         </android.support.v7.widget.Toolbar>
@@ -50,7 +50,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_email_black_24dp"
-            android:hint="Email"
+            android:hint="@string/hintemail"
             android:layout_marginBottom="15dp"
             android:inputType="textEmailAddress"
             android:padding="7dp" />
@@ -62,7 +62,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_key_black_24dp"
-            android:hint="Mật khẩu"
+            android:hint="@string/hintpassword"
             android:inputType="textPassword"
             android:padding="7dp"
             android:layout_marginBottom="15dp"/>
@@ -71,13 +71,12 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="15dp"
     style="@style/Material.Drawable.CheckBox"
-    android:text="Ghi nhớ đăng nhập"
+    android:text="@string/check"
     android:textColor="#000"
     android:textSize="15dp"
     android:layout_gravity="left"
     android:textStyle="bold"
-    app:cbd_strokeColor="#000"
-    app:cbd_tickColor="@color/colorPrimaryDark"
+    app:cbd_tickColor="@color/white"
     android:id="@+id/checkghinho"
     android:gravity="center_vertical"
     />
@@ -86,8 +85,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="#39796b"
-            android:text="Đăng nhập"
+            android:background="@color/colorAccent"
+            android:text="@string/bnt_dangnhap"
+            android:textAllCaps="false"
+            android:textSize="18dp"
             android:textColor="#ffffff" />
         <Button
             android:id="@+id/btnLinkToLoginScreen"
@@ -95,9 +96,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
             android:background="@color/colorlayBackgroud"
-            android:text="Đăng ký tài khoảng"
+            android:text="@string/bnt_dangkytk"
             android:textAllCaps="false"
-            android:textColor="#ffff"
+            android:textColor="@color/text_while"
             android:shadowDx="-2"
             android:textStyle="bold"
             android:shadowDy="-2"

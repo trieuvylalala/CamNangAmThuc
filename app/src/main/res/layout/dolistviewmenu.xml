@@ -19,8 +19,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tên menu"
-            android:textColor="#000"
+            android:text="@string/hintviewname"
+            android:textColor="@color/colortext"
             android:textStyle="bold"
             android:id="@+id/txttenmenu"
             android:layout_margin="8dp"

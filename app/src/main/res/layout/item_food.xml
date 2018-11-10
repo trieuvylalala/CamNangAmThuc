@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/food_name"
             android:textColor="@android:color/white"
-            android:shadowColor="#f10619"
+            android:shadowColor="@color/bgshaw"
             android:background="@color/colorlayBackgroud"
             android:text="Name of Food"
             android:textSize="20dp"

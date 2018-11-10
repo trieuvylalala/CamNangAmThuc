@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
             <TextView
-                android:text="Cộng đồng"
+                android:text="@string/titlecongdong"
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,9 +64,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:text="Cẩm Nang"
+                    android:text="@string/hintcamnang"
                     android:textStyle="bold"
-                    android:textColor="#000000" />
+                    android:textColor="@color/colortext" />
             </LinearLayout>
         </LinearLayout>
 
@@ -102,8 +102,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:textStyle="bold"
-                    android:text="Cộng Đồng"
-                    android:textColor="#000000" />
+                    android:text="@string/titlecongdong"
+                    android:textColor="@color/colortext" />
 
             </LinearLayout>
         </LinearLayout>
@@ -123,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Vui lòng đăng nhập tài khoảng"
+            android:text="@string/hinttt"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="20dp"
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Để sử dụng chức năng"
+            android:text="@string/hinttx"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
@@ -143,10 +143,10 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dip"
-            android:background="#ff6861"
-            android:text="Đăng nhập"
+            android:background="@color/bgre"
+            android:text="@string/bnt_dangnhap"
             android:textAllCaps="false"
-            android:textColor="#ffffff"
+            android:textColor="@color/text_while"
             android:textSize="15dp"
             android:layout_marginBottom="50dp"/>
     </LinearLayout>

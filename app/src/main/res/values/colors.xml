@@ -8,4 +8,12 @@
     <color name="grey_font">#ff9e9e9e</color>
     <color name="text_shadow_white">#FFFFFF</color>
     <color name="white">#f1efef</color>
+    <color name="colortext">#000</color>
+    <color name="colorbackgrou_show_reacy">#00000000</color>
+    <color name="text_while">#FFF</color>
+    <color name="bg_dangky">#ea4c88</color>
+    <color name="bgchonanh">#42D752</color>
+    <color name="bgre">#ff6861</color>
+    <color name="bgshaw">#f10619</color>
+    <color name="coloroshawtext">#5DBCD2</color>
 </resources>

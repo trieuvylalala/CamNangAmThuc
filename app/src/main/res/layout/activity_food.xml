@@ -19,7 +19,6 @@
         app:titleTextColor="@color/text_shadow_white"
         app:popupTheme="@style/AppTheme.PopupOverlay" >
         <TextView
-            android:text="Thông Tin Món"
             android:id="@+id/toolbar_title_thongtinmon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

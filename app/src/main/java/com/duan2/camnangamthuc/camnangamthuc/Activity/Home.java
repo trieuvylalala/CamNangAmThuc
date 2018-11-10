@@ -169,10 +169,6 @@ public class Home extends AppCompatActivity
        final DatabaseReference listuser;
         firebaseDatabase = FirebaseDatabase.getInstance();
         listuser = firebaseDatabase.getReference("Users");
-        pDialog = new ProgressDialog(Home.this);
-        pDialog.setTitle("Đăng nhập");
-        pDialog.setMessage("Vui lòng đợi...");
-        pDialog.show();
         listuser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

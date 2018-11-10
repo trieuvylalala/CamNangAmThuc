@@ -22,7 +22,7 @@
                 android:id="@+id/add_user_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Đăng ký"
+                android:text="@string/bnt_dangky"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:layout_gravity="center" />
         </android.support.v7.widget.Toolbar>
@@ -78,14 +78,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:text="Chọn ảnh đại diện"
-            android:textColor="#42D752"
+            android:text="@string/chonanh"
+            android:textColor="@color/bgchonanh"
             android:textAlignment="center" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="( Bắt buộc )"/>
+            android:text="@string/hintbacbuoc"/>
         <EditText
             android:id="@+id/edtName"
             android:layout_width="match_parent"
@@ -94,7 +94,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_person_black_24dp"
-            android:hint="Nhập tên"
+            android:hint="@string/hinthoten"
             android:inputType="textPersonName"
             android:padding="7dp" />
 
@@ -106,7 +106,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_phone_android_black_24dp"
-            android:hint="Số điện thoại"
+            android:hint="@string/hintsdt"
             android:inputType="phone"
             android:padding="7dp" />
         <EditText
@@ -117,7 +117,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_email_black_24dp"
-            android:hint="Email"
+            android:hint="@string/hintemail"
             android:inputType="textEmailAddress"
             android:padding="7dp" />
         <EditText
@@ -128,7 +128,7 @@
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_key_black_24dp"
-            android:hint="Mật khẩu"
+            android:hint="@string/hintpassword"
             android:inputType="textPassword"
             android:padding="7dp"
             android:layout_marginBottom="15dp"/>
@@ -138,11 +138,13 @@
 
     <Button
         android:id="@+id/btnRegister"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dip"
-    android:background="#ea4c88"
-    android:layout_margin="25dp"
-    android:text="Đăng ký"
-    android:textColor="#ffffff" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:background="@color/bg_dangky"
+        android:layout_margin="25dp"
+        android:textSize="18dp"
+        android:textAllCaps="false"
+        android:text="@string/bnt_dangky"
+        android:textColor="@color/white" />
     </LinearLayout>
