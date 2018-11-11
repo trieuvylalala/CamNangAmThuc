@@ -43,8 +43,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -79,6 +82,7 @@ public class RegistrationActivity extends AppCompatActivity {
     AlertDialog.Builder builder;
     ProgressBar progressBar;
     EditText editxatnhan;
+    AlertDialog b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,8 +211,25 @@ public class RegistrationActivity extends AppCompatActivity {
          editxatnhan = (EditText) sendcode.findViewById(R.id.edtcode);
         final Button bntsend = (Button) sendcode.findViewById(R.id.btnsendcode);
         builder.setView(sendcode);
-        final AlertDialog b = builder.create();
+         b = builder.create();
         b.show();
+        userslist.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Users users = postSnapshot.getValue(Users.class);
+                    if (users.getEmail().equals(editemail.getText().toString())) {
+                        b.dismiss();
+                        Toast.makeText(RegistrationActivity.this, "Email nay đã có người sử dụng", Toast.LENGTH_SHORT).show();
+                    }else {
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
         bntsend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

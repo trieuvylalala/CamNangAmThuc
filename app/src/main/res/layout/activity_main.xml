@@ -15,7 +15,7 @@
     app:ringColor="@color/white"
     app:ringProgressColor="@color/colorPrimaryDark"
     app:textColor="@color/white"
-    app:textSize="20dp"
+    app:textSize="25dp"
     android:id="@+id/loadingg"
     app:ringWidth="8dp"
     android:layout_alignParentBottom="true"
