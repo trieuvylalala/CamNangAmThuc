@@ -169,6 +169,7 @@ public class Home extends AppCompatActivity
        final DatabaseReference listuser;
         firebaseDatabase = FirebaseDatabase.getInstance();
         listuser = firebaseDatabase.getReference("Users");
+        pDialog = new ProgressDialog(Home.this);
         listuser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -177,7 +178,6 @@ public class Home extends AppCompatActivity
                     Users users = postSnapshot.getValue(Users.class);
                     if (!users.getEmail().equals(email) &&
                             !users.getPassword().equals(password)) {
-                        Toast.makeText(Home.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
                     }else {
                         if (users.getEmail().equals(email) &&
                                 users.getPassword().equals(password)
@@ -186,7 +186,7 @@ public class Home extends AppCompatActivity
                             Common.userten = users;
                             adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(adminIntent);
-                            Toast.makeText(Home.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
                         }
                         if (users.getEmail().equals(email) &&
                                 users.getPassword().equals(password)
@@ -195,7 +195,7 @@ public class Home extends AppCompatActivity
                             Common.userten = users;
                             userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(userIntent);
-                            Toast.makeText(Home.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 }
