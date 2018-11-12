@@ -341,9 +341,9 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                Toast.makeText(HomeUsers.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                                                                 dialogwaching.dismiss();
                                                                 b.dismiss();
+                                                                Toast.makeText(HomeUsers.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                     @Override

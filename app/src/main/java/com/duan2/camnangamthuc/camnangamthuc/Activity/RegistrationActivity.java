@@ -246,12 +246,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     editxatnhan.requestFocus();
                     return;
                 }
-                if (!sendcode.equals(code)){
-                    editxatnhan.setError("Mã không đúng");
-                    editxatnhan.requestFocus();
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
                     verycode(code);
                     b.dismiss();
             }
@@ -267,26 +261,8 @@ public class RegistrationActivity extends AppCompatActivity {
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(final PhoneAuthCredential phoneAuthCredential) {
-            userslist.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Users users = postSnapshot.getValue(Users.class);
-                        if (users.getEmail().equals(editemail.getText().toString())) {
-                            b.dismiss();
-                        } else {
-                            String code = phoneAuthCredential.getSmsCode();
-                            if (code != null) {
-                                editxatnhan.setText(code);
-                                verycode(code);
-                            }
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                }
-            });
+             String code = phoneAuthCredential.getSmsCode();
+             editxatnhan.setText(code);
         }
 
         @Override
