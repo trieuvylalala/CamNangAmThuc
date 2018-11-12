@@ -3,6 +3,7 @@ package com.duan2.camnangamthuc.camnangamthuc.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,11 +22,15 @@ import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
 import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.FoodInfomation;
+import com.duan2.camnangamthuc.camnangamthuc.Model.Users;
 import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class LoadSeachActivity extends AppCompatActivity {
@@ -66,7 +71,7 @@ public class LoadSeachActivity extends AppCompatActivity {
                     if(getIntent() !=null){
                         KetGet = getIntent().getStringExtra("KeyGet");
                         if (!KetGet.isEmpty()) {
-                            starload(KetGet);
+                            noseach(KetGet);
                             Log.d("KLKKK",KetGet);
                         }
                     }
@@ -79,6 +84,30 @@ public class LoadSeachActivity extends AppCompatActivity {
         }else {
             CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
         }
+    }
+    private void noseach(final String text){
+        foodInfomationlist.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //lấy vị trí trog database
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    FoodInfomation foodInfomation = postSnapshot.getValue(FoodInfomation.class);
+                    //so sánh nếu dữ liệu truyền vào có trong database
+                    if (foodInfomation.getName().equals(text)) {
+                        starload(text);
+                        //ngược lại k có trong database
+                    }else {
+                        setContentView(R.layout.fialeseach);
+                        Toast.makeText(LoadSeachActivity.this, "Không tìm thấy", Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
     private void ChayToolBar() {
         setSupportActionBar(toolbar);
@@ -113,18 +142,21 @@ public class LoadSeachActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    //tìm kiếm trong database theo tên
     private void starload(final String text){
         Query fireQuery = foodInfomationlist.orderByChild("Name").startAt(text).endAt(text +"\uf8ff");
         adapter = new FirebaseRecyclerAdapter<FoodInfomation, FoodInfomationViewHoder>(FoodInfomation.class,R.layout.item_foodinfomation,FoodInfomationViewHoder.class,
                fireQuery){//tìm kiếm : select * from Food where MenuId
             @Override
             protected void populateViewHolder(FoodInfomationViewHoder viewHolder, FoodInfomation model, int position) {
+                //hiển thị tên,hình ảnh đã đc tìm kiếm
                     viewHolder.txtInfomationViewName.setText(model.getName());
                     viewHolder.txtInfomationViewInfo.setText(model.getInfomation());
                     viewHolder.txtInfomationViewInfo.setMaxLines(2);
                     viewHolder.txtInfomationViewInfo.setEllipsize(TextUtils.TruncateAt.END);
                     Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.imgFoodInfomationView);
                     final FoodInfomation foodInfomation = model;
+                    //click vào từg item
                     viewHolder.setItemListener(new ItemClickListerner() {
                         @Override
                         public void onClick(View view, int position, boolean isLongClick) {

@@ -65,19 +65,29 @@ public class LoginActivity extends AppCompatActivity {
                                 pDialog.dismiss();
                                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                     Users users = postSnapshot.getValue(Users.class);
+                                    //so sánh dữ liệu từ database lấy về  với sự kiện gõ lên
+                                    //sự kiện gõ lên không trùng với database
                                     if (!users.getEmail().equals(editloginemail.getText().toString()) &&
                                             !users.getPassword().equals(editloginpassword.getText().toString())) {
                                         Toast.makeText(LoginActivity.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
+                                    //ngược lại trùng
                                     }else {
+                                        //so sánh dữ liệu từ database lấy về  với sự kiện gõ lên
+                                        //truyền vào 1 hàm equalsIgnoreCase lấy ra từ 1 biến trong database
+                                        //biến truyền về từ database là admin
                                         if (users.getEmail().equals(editloginemail.getText().toString()) &&
                                                 users.getPassword().equals(editloginpassword.getText().toString())
                                                 && users.getRole().equalsIgnoreCase("admin")) {
                                             Intent adminIntent = new Intent(LoginActivity.this, HomeAdmin.class);
                                             Common.userten = users;
+                                            //chuyển qua tab mới//đóng tab hiện tại
                                             adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(adminIntent);
                                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                                         }
+                                        //so sánh dữ liệu từ database lấy về  với sự kiện gõ lên
+                                        //truyền vào 1 hàm equalsIgnoreCase lấy ra từ 1 biến trong database
+                                        //biến truyền về từ database là use
                                         if (users.getEmail().equals(editloginemail.getText().toString()) &&
                                                 users.getPassword().equals(editloginpassword.getText().toString())
                                                 && users.getRole().equalsIgnoreCase("user")) {
