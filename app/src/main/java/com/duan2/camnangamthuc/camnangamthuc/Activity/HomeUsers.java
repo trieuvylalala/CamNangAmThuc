@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -41,14 +42,24 @@ import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
 import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.MenuHome;
+import com.duan2.camnangamthuc.camnangamthuc.Model.Users;
 import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 
 public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener{
@@ -66,6 +77,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
     TextView txtloginuse;
     ImageView imgloginuse;
     AlertDialog.Builder builder;
+    AlertDialog b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -296,8 +308,69 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
 
                 break;
             case 1:
-               /* Intent intent2 = new Intent(ChemGioActiviti.this, HuCauActiviti.class);
-                startActivity(intent2);*/
+                builder = new AlertDialog.Builder(HomeUsers.this);
+                builder.setTitle("Đổi mật khẩu");
+                builder.setMessage("Nhập mật khẩu");
+                LayoutInflater layoutInflater = HomeUsers.this.getLayoutInflater();
+                final View viewdoimk = layoutInflater.inflate(R.layout.item_changpass_shaw,null);
+                final EditText editmkcu = (EditText) viewdoimk.findViewById(R.id.editmkcu);
+                final EditText editmkmoi = (EditText) viewdoimk.findViewById(R.id.editmkmoi);
+                final EditText editmkmoinl = (EditText) viewdoimk.findViewById(R.id.editmkmoinl);
+                final Button bntsendmk = (Button) viewdoimk.findViewById(R.id.btnsenddoimk);
+                builder.setView(viewdoimk);
+                builder.setIcon(R.drawable.ic_vpn_key_black_24dp);
+                b = builder.create();
+                b.show();
+                bntsendmk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final AlertDialog dialogwaching = new SpotsDialog(HomeUsers.this);
+                        dialogwaching.show();
+                        if(editmkcu.getText().toString().equals(Common.userten.getPassword())) {
+                            if (editmkmoi.getText().toString().equals(editmkmoinl.getText().toString())) {
+                                final Map<String, Object> doimatkhau = new HashMap<>();
+                                doimatkhau.put("password", editmkmoi.getText().toString());
+                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                            postSnapshot.getValue(Users.class);
+                                            String email = Common.userten.getEmail();
+                                                reference.child(postSnapshot.getKey()).updateChildren(doimatkhau)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                Toast.makeText(HomeUsers.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                                                                dialogwaching.dismiss();
+                                                                b.dismiss();
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(HomeUsers.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            } else {
+                                b.dismiss();
+                                dialogwaching.dismiss();
+                                Toast.makeText(HomeUsers.this, "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            b.dismiss();
+                            dialogwaching.dismiss();
+                            Toast.makeText(HomeUsers.this, "Mật khẩu không chính xát", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             case 2:
                 break;

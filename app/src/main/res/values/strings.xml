@@ -31,4 +31,9 @@
     <string name="seach">Thử lại</string>
     <string name="mabm">Mã bảo mật</string>
     <string name="quenmk">Quên mật khẩu?</string>
+    <string name="laymk">Lấy mật khẩu</string>
+    <string name="mkcu">Mật khẩu cũ</string>
+    <string name="mkmoi">Mật khẩu mới</string>
+    <string name="mkmoinl">Nhập lại mật khẩu mới</string>
+    <string name="doimk">Đổi mật khẩu</string>
 </resources>

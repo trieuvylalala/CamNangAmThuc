@@ -105,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                                             userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(userIntent);
                                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                            listuser.removeEventListener(this);
                                         }
                                     }
                                 }
