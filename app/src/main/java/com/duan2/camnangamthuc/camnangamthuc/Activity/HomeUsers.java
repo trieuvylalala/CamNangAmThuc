@@ -32,6 +32,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
 import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
@@ -86,7 +88,8 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
         txtloginuse  = (TextView) findViewById(R.id.txtviewuse);
         imgloginuse  = (ImageView)findViewById(R.id.imgloginuse) ;
         txtloginuse.setText(Common.userten.getName());
-        Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginuse);
+/*        Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginuse);*/
+        Glide.with(getApplicationContext()).load(Common.userten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgloginuse);
         Paper.init(this);
         //khai báo listview menu
         thongtintkIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.thongtintaikhoang);

@@ -32,6 +32,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
 import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
@@ -86,7 +88,8 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         txtloginad  = (TextView) findViewById(R.id.textviewloginad);
         imgloginad  = (ImageView)findViewById(R.id.imgloginadmin) ;
         txtloginad.setText(Common.userten.getName());
-        Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginad);
+        /*Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginad);*/
+        Glide.with(getApplicationContext()).load(Common.userten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgloginad);
         Paper.init(this);
         //khai báo listview menu
         quanlitktkIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.qltk);

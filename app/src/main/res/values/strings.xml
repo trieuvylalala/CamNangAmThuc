@@ -27,4 +27,6 @@
     <string name="hintseach">Nhập tên món cần tìm</string>
     <string name="xn">Xát nhận</string>
     <string name="maxn">Mã xát nhận</string>
+    <string name="noseach">Không tìm thấy</string>
+    <string name="seach">Thử lại</string>
 </resources>

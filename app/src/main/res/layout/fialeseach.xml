@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_loadseach"
+            android:id="@+id/toolbar_loadseachfall"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:titleTextColor="@color/text_shadow_white"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
             <TextView
-                android:id="@+id/toolbar_title_loadseachfale"
+                android:id="@+id/toolbar_title_loadseachfall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -31,13 +31,39 @@
                 android:src="@mipmap/ic_launcher_round"/>
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
- <TextView
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_gravity="center_vertical"
-     android:text="Không tìm thấy"
-     android:textColor="#000"
-     android:id="@+id/textfale"
-     android:textSize="20dp"
-     android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:paddingEnd="25dp"
+        android:paddingStart="25dp"
+        android:gravity="center"
+        android:background="@drawable/backgroud_form"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:id="@+id/hienthifall"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp"
+            android:padding="7dp" />
+        <Button
+            android:id="@+id/btntimkiemfall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dip"
+            android:background="@color/bgchonanh"
+            android:text="@string/seach"
+            android:textAllCaps="false"
+            android:textColor="@color/text_while"
+            android:textSize="20dp"
+            android:layout_marginBottom="50dp"/>
+    </LinearLayout>
 </LinearLayout>

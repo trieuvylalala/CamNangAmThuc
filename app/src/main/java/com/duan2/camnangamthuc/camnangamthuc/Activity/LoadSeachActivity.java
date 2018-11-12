@@ -69,9 +69,11 @@ public class LoadSeachActivity extends AppCompatActivity {
                 public void run() {
                     //get sự kiện inten từ Home
                     if(getIntent() !=null){
+                        //lấy dữ liệu đc push từ intent
+                        //tham số truyền vào KeyGet
                         KetGet = getIntent().getStringExtra("KeyGet");
                         if (!KetGet.isEmpty()) {
-                            noseach(KetGet);
+                            starload(KetGet);
                             Log.d("KLKKK",KetGet);
                         }
                     }
@@ -84,30 +86,6 @@ public class LoadSeachActivity extends AppCompatActivity {
         }else {
             CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
         }
-    }
-    private void noseach(final String text){
-        foodInfomationlist.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //lấy vị trí trog database
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    FoodInfomation foodInfomation = postSnapshot.getValue(FoodInfomation.class);
-                    //so sánh nếu dữ liệu truyền vào có trong database
-                    if (foodInfomation.getName().equals(text)) {
-                        starload(text);
-                        //ngược lại k có trong database
-                    }else {
-                        setContentView(R.layout.fialeseach);
-                        Toast.makeText(LoadSeachActivity.this, "Không tìm thấy", Toast.LENGTH_SHORT).show();
-                        pDialog.dismiss();
-                    }
-                }
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
     }
     private void ChayToolBar() {
         setSupportActionBar(toolbar);
