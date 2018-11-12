@@ -1,13 +1,13 @@
 package com.duan2.camnangamthuc.camnangamthuc.Model;
 
 public class Users {
-    private String id,name,image,phone,email,password,role;
+    private String code,name,image,phone,email,password,role;
 
     public Users() {
     }
 
-    public Users(String id, String name, String image, String phone, String email, String password, String role) {
-        this.id = id;
+    public Users(String code, String name, String image, String phone, String email, String password, String role) {
+        this.code = code;
         this.name = name;
         this.image = image;
         this.phone = phone;
@@ -16,12 +16,12 @@ public class Users {
         this.role = role;
     }
 
-    public String getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {

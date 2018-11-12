@@ -50,8 +50,7 @@
             android:id="@+id/imgAvatar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/ic_launcher_round"
-            app:srcCompat="@drawable/ic_avatar_user"
+            android:src="@drawable/logo"
             tools:ignore="VectorDrawableCompat" />
             <LinearLayout
                 android:id="@+id/lnl"
@@ -90,7 +89,7 @@
             android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_person_black_24dp"
@@ -113,7 +112,7 @@
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_email_black_24dp"
@@ -124,16 +123,27 @@
             android:id="@+id/edtpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:drawablePadding="9dp"
             android:background="@drawable/backgroud_edittext"
             android:drawableStart="@drawable/ic_key_black_24dp"
             android:hint="@string/hintpassword"
             android:inputType="textPassword"
+            android:padding="7dp" />
+
+
+        <EditText
+            android:id="@+id/edtcodereset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawablePadding="9dp"
+            android:background="@drawable/backgroud_edittext"
+            android:drawableStart="@drawable/ic_soucode"
+            android:hint="@string/mabm"
+            android:inputType="text"
             android:padding="7dp"
             android:layout_marginBottom="15dp"/>
-
-
     </LinearLayout>
 
     <Button

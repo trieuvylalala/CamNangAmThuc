@@ -29,4 +29,6 @@
     <string name="maxn">Mã xát nhận</string>
     <string name="noseach">Không tìm thấy</string>
     <string name="seach">Thử lại</string>
+    <string name="mabm">Mã bảo mật</string>
+    <string name="quenmk">Quên mật khẩu?</string>
 </resources>

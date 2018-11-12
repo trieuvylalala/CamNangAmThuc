@@ -1,13 +1,18 @@
 package com.duan2.camnangamthuc.camnangamthuc.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
@@ -29,12 +34,16 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference listuser;
     ProgressDialog pDialog;
     CheckBox checkBoxghinho;
+    TextView txtforgot;
+    AlertDialog.Builder builder;
+    AlertDialog b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         editloginemail = (EditText) findViewById(R.id.edtEmaillogin);
         editloginpassword = (EditText)findViewById(R.id.edtpasswordlogin);
+        txtforgot = (TextView) findViewById(R.id.textquenmk);
         bntlogin = (Button) findViewById(R.id.btnlogin);
         bntchanreque = (Button) findViewById(R.id.btnLinkToLoginScreen);
         checkBoxghinho = (CheckBox) findViewById(R.id.checkghinho);
@@ -107,5 +116,58 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }
                 });
+                txtforgot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setTitle("Quên mật khẩu");
+                        builder.setMessage("Nhập thông tin bên dưới để lấy lại mật khẩu");
+                        LayoutInflater layoutInflater = LoginActivity.this.getLayoutInflater();
+                        final View sendcode = layoutInflater.inflate(R.layout.show_forgotpass,null);
+                        final EditText editmailforgot = (EditText) sendcode.findViewById(R.id.edtEmailforgot);
+                        final EditText codeforgot = (EditText) sendcode.findViewById(R.id.edtcoderesetforgot);
+                        final Button bntsend = (Button) sendcode.findViewById(R.id.btnsendmkforgot);
+                        builder.setView(sendcode);
+                        builder.setIcon(R.drawable.ic_security_black_24dp);
+                        b = builder.create();
+                        b.show();
+                        bntsend.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                               listuser.addValueEventListener(new ValueEventListener() {
+                                   @Override
+                                   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                       for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                           Users users = postSnapshot.getValue(Users.class);
+                                           if (users.getEmail().equals(editmailforgot.getText().toString()) && users.getCode().equals(codeforgot.getText().toString())){
+                                               b.dismiss();
+                                               sendmatkhau(users.getPassword());
+                                           }else {
+                                               Toast.makeText(LoginActivity.this, "Nhập thông tin", Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                                   }
+
+                                   @Override
+                                   public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                   }
+                               });
+                            }
+                        });
+                    }
+                });
+    }
+    private void sendmatkhau(String matkhau){
+        String mk = "Mật khẩu của bạn là <font color='blue'> <Strong>"+ matkhau+ "</Strong></font>";
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Gửi mật khẩu");
+        dialog.setMessage(Html.fromHtml(mk));
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        dialog.show();
     }
 }

@@ -272,6 +272,7 @@ public class Home extends AppCompatActivity
             final Button bntthoat = (Button) sendcode.findViewById(R.id.btn_thoat);
             final Button bnttim = (Button) sendcode.findViewById(R.id.btn_tim);
             builder.setView(sendcode);
+            builder.setIcon(R.drawable.ic_seach_showdialog);
             final AlertDialog b = builder.create();
             b.show();
             bntthoat.setOnClickListener(new View.OnClickListener() {

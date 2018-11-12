@@ -65,7 +65,7 @@ public class RegistrationActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference userslist;
     Toolbar toolbar;
-    EditText editname,editphone,editemail,editpass;
+    EditText editname,editphone,editemail,editpass,editcoderes;
     Button btnRegister;
     CircleImageView imgAvatar;
     ImageView iconphoto;
@@ -100,6 +100,7 @@ public class RegistrationActivity extends AppCompatActivity {
         editphone = (EditText)findViewById(R.id.edtPhone);
         editemail = (EditText)findViewById(R.id.edtEmail);
         editpass = (EditText)findViewById(R.id.edtpassword);
+        editcoderes = (EditText)findViewById(R.id.edtcodereset);
         btnRegister =(Button) findViewById(R.id.btnRegister);
         imgAvatar = (CircleImageView) findViewById(R.id.imgAvatar);
         iconphoto = (ImageView) findViewById(R.id.iconphoto);
@@ -124,6 +125,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String phone = editphone.getText().toString();
                 String email = editemail.getText().toString();
                 String pass = editpass.getText().toString();
+                String coderess = editcoderes.getText().toString();
                 if(name.isEmpty()){
                     editname.setError("Vui lòng nhập tên");
                     editname.requestFocus();
@@ -152,6 +154,11 @@ public class RegistrationActivity extends AppCompatActivity {
                 if(pass.isEmpty()){
                     editpass.setError("Vui lòng nhập mật khẩu");
                     editpass.requestFocus();
+                    kt = false;
+                }
+                if(coderess.isEmpty()){
+                    editcoderes.setError("Vui lòng nhập mã bảo vệ");
+                    editcoderes.requestFocus();
                     kt = false;
                 }
                 if( kt == true){
@@ -259,12 +266,27 @@ public class RegistrationActivity extends AppCompatActivity {
     }
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
-        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-            String code = phoneAuthCredential.getSmsCode();
-            if(code != null){
-                editxatnhan.setText(code);
-                verycode(code);
-            }
+        public void onVerificationCompleted(final PhoneAuthCredential phoneAuthCredential) {
+            userslist.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Users users = postSnapshot.getValue(Users.class);
+                        if (users.getEmail().equals(editemail.getText().toString())) {
+                            b.dismiss();
+                        } else {
+                            String code = phoneAuthCredential.getSmsCode();
+                            if (code != null) {
+                                editxatnhan.setText(code);
+                                verycode(code);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
 
         @Override
@@ -297,9 +319,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                             public void onSuccess(Uri uri) {
                                                 newuUsers = new Users();
                                                 newuUsers.setName(editname.getText().toString());
+                                                newuUsers.setName(editname.getText().toString());
                                                 newuUsers.setPhone(editphone.getText().toString());
                                                 newuUsers.setEmail(editemail.getText().toString());
                                                 newuUsers.setPassword(editpass.getText().toString());
+                                                newuUsers.setCode(editcoderes.getText().toString());
                                                 newuUsers.setRole(role);
                                                 newuUsers.setImage(uri.toString());
                                                 if(newuUsers !=null){
