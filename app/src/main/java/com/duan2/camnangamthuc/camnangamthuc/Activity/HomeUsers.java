@@ -336,13 +336,12 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                             postSnapshot.getValue(Users.class);
-                                            String email = Common.userten.getEmail();
                                                 reference.child(postSnapshot.getKey()).updateChildren(doimatkhau)
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                dialogwaching.dismiss();
                                                                 b.dismiss();
+                                                                dialogwaching.dismiss();
                                                                 Toast.makeText(HomeUsers.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {

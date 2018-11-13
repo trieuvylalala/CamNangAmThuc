@@ -30,10 +30,12 @@
     <string name="noseach">Không tìm thấy</string>
     <string name="seach">Thử lại</string>
     <string name="mabm">Mã bảo mật</string>
-    <string name="quenmk">Quên mật khẩu?</string>
+    <string name="quenmk"><u>Quên mật khẩu?</u></string>
     <string name="laymk">Lấy mật khẩu</string>
     <string name="mkcu">Mật khẩu cũ</string>
     <string name="mkmoi">Mật khẩu mới</string>
     <string name="mkmoinl">Nhập lại mật khẩu mới</string>
     <string name="doimk">Đổi mật khẩu</string>
+    <string name="facebook_app_id">258579511521094</string>
+    <string name="facebook_login_protocol_name">fb258579511521094</string>
 </resources>

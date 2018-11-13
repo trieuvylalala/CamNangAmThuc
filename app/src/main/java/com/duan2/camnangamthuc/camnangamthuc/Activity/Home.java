@@ -183,8 +183,7 @@ public class Home extends AppCompatActivity
                                 users.getPassword().equals(password)
                                 && users.getRole().equalsIgnoreCase("admin")) {
                             Intent adminIntent = new Intent(Home.this, HomeAdmin.class);
-                            Common.userten = users;
-                            adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            Common.userten = users;;
                             startActivity(adminIntent);
 
                         }
@@ -193,7 +192,6 @@ public class Home extends AppCompatActivity
                                 && users.getRole().equalsIgnoreCase("user")) {
                             Intent userIntent = new Intent(Home.this, HomeUsers.class);
                             Common.userten = users;
-                            userIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(userIntent);
 
                         }

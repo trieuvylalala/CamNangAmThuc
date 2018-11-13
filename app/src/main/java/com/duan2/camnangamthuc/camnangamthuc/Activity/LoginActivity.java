@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         pDialog.setTitle("Đăng nhập");
                         pDialog.setMessage("Vui lòng đợi...");
                         pDialog.show();
-                        listuser.addValueEventListener(new ValueEventListener() {
+                        listuser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 pDialog.dismiss();

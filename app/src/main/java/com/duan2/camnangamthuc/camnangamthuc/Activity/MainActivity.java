@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 for (int x = 0; x < 100; x++) {
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(50);
                         handler.sendEmptyMessage(0);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
