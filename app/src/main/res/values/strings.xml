@@ -19,13 +19,13 @@
     <string name="chonanh">Chọn ảnh đại diện</string>
     <string name="titlecongdong">Cộng đồng</string>
     <string name="hintcamnang">Cẩm nang</string>
-    <string name="hinttt">Vui lòng đăng nhập tài khoảng</string>
+    <string name="hinttt">Vui lòng đăng nhập tài khoản</string>
     <string name="hinttx">Để xem bài đăng</string>
     <string name="hintviewname">Tên menu</string>
     <string name="tim">Tìm</string>
     <string name="thoat">Thoát</string>
     <string name="hintseach">Nhập tên món cần tìm</string>
-    <string name="xn">Xát nhận</string>
+    <string name="xn">Xác nhận</string>
     <string name="maxn">Mã xát nhận</string>
     <string name="noseach">Không tìm thấy</string>
     <string name="seach">Thử lại</string>
@@ -38,4 +38,5 @@
     <string name="doimk">Đổi mật khẩu</string>
     <string name="facebook_app_id">258579511521094</string>
     <string name="facebook_login_protocol_name">fb258579511521094</string>
+    <string name="danhsachtk">Danh sách tài khoản</string>
 </resources>

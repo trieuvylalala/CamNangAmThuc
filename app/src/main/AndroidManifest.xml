@@ -13,9 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id">
-        </meta-data>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"></meta-data>
+
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,11 +36,14 @@
         <activity android:name=".Activity.HomeAdmin" />
         <activity android:name=".Activity.HomeUsers" />
         <activity android:name=".Activity.CongDongActivity" />
-        <activity android:name=".Activity.LoadSeachActivity"></activity>
+        <activity android:name=".Activity.LoadSeachActivity" />
+
         <provider
-            android:authorities="com.facebook.app.FacebookContentProvider258579511521094"
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"></provider>
+            android:authorities="com.facebook.app.FacebookContentProvider258579511521094"
+            android:exported="true" />
+
+        <activity android:name=".Activity.ViewListUseAdminActivity"></activity>
     </application>
 
 </manifest>

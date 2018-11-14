@@ -267,7 +267,8 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
             case 0:
-
+                Intent listusead = new Intent(HomeAdmin.this,ViewListUseAdminActivity.class);
+                startActivity(listusead);
                 break;
             case 1:
                /* Intent intent2 = new Intent(ChemGioActiviti.this, HuCauActiviti.class);

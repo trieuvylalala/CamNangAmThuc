@@ -1,5 +1,6 @@
 package com.duan2.camnangamthuc.camnangamthuc.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.nfc.Tag;
@@ -34,6 +35,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import dmax.dialog.SpotsDialog;
+
 public class FoodActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -43,6 +46,7 @@ public class FoodActivity extends AppCompatActivity {
     Toolbar toolbar;
     FirebaseRecyclerAdapter<Food,FoodViewHoder> adapter;
     ProgressDialog pDialog;
+    AlertDialog dialogwaching;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +65,8 @@ public class FoodActivity extends AppCompatActivity {
         //kiểm tra kết nối internet
         if (CheckInternet.haveNetworkConnection(this)){
             //load dialog
-            pDialog = new ProgressDialog(FoodActivity.this);
-            pDialog.setCancelable(false);
-            pDialog.setMessage("Đang tải dữ liệu...");
-            pDialog.show();
+            dialogwaching = new SpotsDialog(FoodActivity.this);
+            dialogwaching.show();
             Runnable progressRunnable = new Runnable() {
 
                 @Override
@@ -145,6 +147,6 @@ public class FoodActivity extends AppCompatActivity {
         //set adapter
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-        pDialog.dismiss();
+        dialogwaching.dismiss();
     }
 }
