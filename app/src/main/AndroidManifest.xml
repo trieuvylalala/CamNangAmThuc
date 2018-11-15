@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"></meta-data>
+            android:value="@string/facebook_app_id" />
 
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
@@ -43,7 +43,8 @@
             android:authorities="com.facebook.app.FacebookContentProvider258579511521094"
             android:exported="true" />
 
-        <activity android:name=".Activity.ViewListUseAdminActivity"></activity>
+        <activity android:name=".Activity.ViewListUseAdminActivity" />
+        <activity android:name=".Activity.AccountinformationActivity"></activity>
     </application>
 
 </manifest>

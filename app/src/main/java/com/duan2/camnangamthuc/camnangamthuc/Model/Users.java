@@ -1,12 +1,14 @@
 package com.duan2.camnangamthuc.camnangamthuc.Model;
 
-public class Users {
-    private String code,name,image,phone,email,password,role;
+import java.io.Serializable;
+
+public class Users implements Serializable {
+    private String code,name,image,phone,email,password,role,ngaysinh,diachi;
 
     public Users() {
     }
 
-    public Users(String code, String name, String image, String phone, String email, String password, String role) {
+    public Users(String code, String name, String image, String phone, String email, String password, String role,String ngaysinh,String diachi) {
         this.code = code;
         this.name = name;
         this.image = image;
@@ -14,6 +16,8 @@ public class Users {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.ngaysinh = ngaysinh;
+        this.diachi = diachi;
     }
 
     public String getCode() {
@@ -70,5 +74,21 @@ public class Users {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getNgaysinh() {
+        return ngaysinh;
+    }
+
+    public void setNgaysinh(String ngaysinh) {
+        this.ngaysinh = ngaysinh;
+    }
+
+    public String getDiachi() {
+        return diachi;
+    }
+
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
     }
 }

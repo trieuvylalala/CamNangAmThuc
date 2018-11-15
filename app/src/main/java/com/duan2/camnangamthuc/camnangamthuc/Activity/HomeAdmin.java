@@ -55,7 +55,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
-    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon;
+    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon;
     FirebaseDatabase database;
     DatabaseReference category;
     RecyclerView recyclerView;
@@ -93,7 +93,9 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         Paper.init(this);
         //khai báo listview menu
         quanlitktkIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.qltk);
-        listArray.add(new MenuHome("Quản lý tài khoảng", quanlitktkIcon));
+        listArray.add(new MenuHome("Quản lý tài khoản", quanlitktkIcon));
+        thongtintkIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.thongtintaikhoang);
+        listArray.add(new MenuHome("Thông tin tài khoản",thongtintkIcon));
         baivietdadangIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.baiviet);
         listArray.add(new MenuHome("Bài viết đã đăng", baivietdadangIcon));
         xemdanhgiaIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.danhgia);
@@ -271,12 +273,13 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
                 startActivity(listusead);
                 break;
             case 1:
-               /* Intent intent2 = new Intent(ChemGioActiviti.this, HuCauActiviti.class);
-                startActivity(intent2);*/
+                Intent account = new Intent(HomeAdmin.this,AccountinformationActivity.class);
+                account.putExtra("KeyEmail", Common.userten.getEmail());
+                startActivity(account);
                 break;
             case 2:
                 break;
-            case 4:
+            case 5:
                 Paper.book().destroy();
                 Intent longoutent = new Intent(HomeAdmin.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

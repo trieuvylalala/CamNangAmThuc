@@ -39,4 +39,10 @@
     <string name="facebook_app_id">258579511521094</string>
     <string name="facebook_login_protocol_name">fb258579511521094</string>
     <string name="danhsachtk">Danh sách tài khoản</string>
+    <string name="tttk">Thông tin tài khoản</string>
+    <string name="xoatk">Xóa tài khoản</string>
+    <string name="chinhsuatk">Chỉnh sửa</string>
+    <string name="ngaysinh">Ngày sinh</string>
+    <string name="diachi">Địa chỉ</string>
+    <string name="luu">Lưu</string>
 </resources>

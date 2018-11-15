@@ -14,8 +14,9 @@ public class ViewlistuseadminAdapter extends RecyclerView.ViewHolder implements 
     public TextView txtViewliseName;
     public TextView txtPhoneusead;
     public TextView txtEmailusead;
-    public TextView txtmkusead;
     public TextView txtcodeusead;
+    public TextView txtdiachiusead;
+    public TextView txtngaysinhusead;
     public CircleImageView imgAvatarusead;
     public ImageView deleteoption;
     private ItemClickListerner itemClickListerner;
@@ -25,8 +26,9 @@ public class ViewlistuseadminAdapter extends RecyclerView.ViewHolder implements 
         txtViewliseName = (TextView)itemView.findViewById(R.id.txtNameusead);
         txtPhoneusead = (TextView)itemView.findViewById(R.id.txtPhoneusead);
         txtEmailusead = (TextView)itemView.findViewById(R.id.txtEmailusead);
-        txtmkusead = (TextView)itemView.findViewById(R.id.txtmkusead);
         txtcodeusead = (TextView)itemView.findViewById(R.id.txtcodeusead);
+        txtdiachiusead = (TextView)itemView.findViewById(R.id.txtdiachiusead);
+        txtngaysinhusead = (TextView)itemView.findViewById(R.id.txtngaysinhusead);
         imgAvatarusead = (CircleImageView)itemView.findViewById(R.id.imgAvatarusead);
         itemView.setOnClickListener(this);
     }

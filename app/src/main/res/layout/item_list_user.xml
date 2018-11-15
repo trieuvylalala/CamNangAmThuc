@@ -81,7 +81,6 @@
                 android:layout_below="@id/viewPhoneuse"
                 android:layout_toEndOf="@id/iconEmail"
                 android:textColor="@color/colorTextMedium"
-                android:text="@string/hintemail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <View
@@ -95,19 +94,18 @@
 
             <ImageView
                 android:layout_below="@id/viewEmail"
-                android:id="@+id/mkuse"
+                android:id="@+id/ngaysinhuse"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_width="@dimen/_13sdp"
                 android:layout_height="@dimen/_13sdp"
-                app:srcCompat="@drawable/ic_visibility_off_black_24dp"
+                app:srcCompat="@drawable/ic_birthday_back_24dp"
                 tools:ignore="VectorDrawableCompat" />
             <TextView
-                android:id="@+id/txtmkusead"
+                android:id="@+id/txtngaysinhusead"
                 android:textSize="@dimen/_13sdp"
                 android:layout_below="@id/viewEmail"
-                android:layout_toEndOf="@id/mkuse"
+                android:layout_toEndOf="@id/ngaysinhuse"
                 android:textColor="@color/colorInputFacebook"
-                android:text="@string/hintpassword"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -116,13 +114,37 @@
                 android:id="@+id/viewmk"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:layout_marginBottom="@dimen/_6sdp"
-                android:layout_below="@id/mkuse"
+                android:layout_below="@id/ngaysinhuse"
                 android:layout_width="match_parent"
                 android:background="@color/colorView"
                 android:layout_height="1dp"/>
-
             <ImageView
                 android:layout_below="@id/viewmk"
+                android:id="@+id/diachiuse"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_width="@dimen/_13sdp"
+                android:layout_height="@dimen/_13sdp"
+                app:srcCompat="@drawable/ic_maps_back_24dp"
+                tools:ignore="VectorDrawableCompat" />
+            <TextView
+                android:id="@+id/txtdiachiusead"
+                android:textSize="@dimen/_13sdp"
+                android:layout_below="@id/viewmk"
+                android:layout_toEndOf="@id/diachiuse"
+                android:textColor="@color/colorInputFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:id="@+id/viewdiachi"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:layout_below="@id/diachiuse"
+                android:layout_width="match_parent"
+                android:background="@color/colorView"
+                android:layout_height="1dp"/>
+            <ImageView
+                android:layout_below="@id/viewdiachi"
                 android:id="@+id/iconcode"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_width="@dimen/_13sdp"
@@ -132,10 +154,9 @@
             <TextView
                 android:id="@+id/txtcodeusead"
                 android:textSize="@dimen/_13sdp"
-                android:layout_below="@id/viewmk"
+                android:layout_below="@id/viewdiachi"
                 android:layout_toEndOf="@id/iconcode"
                 android:textColor="@color/colorInputFacebook"
-                android:text="@string/mabm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

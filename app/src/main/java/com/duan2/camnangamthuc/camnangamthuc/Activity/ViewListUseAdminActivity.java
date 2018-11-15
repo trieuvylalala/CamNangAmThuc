@@ -115,9 +115,12 @@ public class ViewListUseAdminActivity extends AppCompatActivity {
                 viewHolder.txtEmailusead.setText(model.getEmail());
                 viewHolder.txtEmailusead.setSingleLine(true);
                 viewHolder.txtEmailusead.setEllipsize(TextUtils.TruncateAt.END);
-                viewHolder.txtmkusead.setText(model.getPassword());
-                viewHolder.txtmkusead.setSingleLine(true);
-                viewHolder.txtmkusead.setEllipsize(TextUtils.TruncateAt.END);
+                viewHolder.txtngaysinhusead.setText(model.getNgaysinh());
+                viewHolder.txtngaysinhusead.setSingleLine(true);
+                viewHolder.txtngaysinhusead.setEllipsize(TextUtils.TruncateAt.END);
+                viewHolder.txtdiachiusead.setText(model.getDiachi());
+                viewHolder.txtdiachiusead.setSingleLine(true);
+                viewHolder.txtdiachiusead.setEllipsize(TextUtils.TruncateAt.END);
                 viewHolder.txtcodeusead.setText(model.getCode());
                 viewHolder.txtcodeusead.setSingleLine(true);
                 viewHolder.txtcodeusead.setEllipsize(TextUtils.TruncateAt.END);

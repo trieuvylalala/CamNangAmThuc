@@ -143,9 +143,8 @@ public class LoginActivity extends AppCompatActivity {
                                            if (users.getEmail().equals(editmailforgot.getText().toString()) && users.getCode().equals(codeforgot.getText().toString())){
                                                b.dismiss();
                                                sendmatkhau(users.getPassword());
-                                           }else {
-                                               Toast.makeText(LoginActivity.this, "Nhập thông tin", Toast.LENGTH_SHORT).show();
                                            }
+
                                        }
                                    }
 

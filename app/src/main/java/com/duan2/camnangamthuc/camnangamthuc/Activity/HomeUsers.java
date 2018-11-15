@@ -105,7 +105,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
         Paper.init(this);
         //khai báo listview menu
         thongtintkIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.thongtintaikhoang);
-        listArray.add(new MenuHome("Thông tin tài khoảng",thongtintkIcon));
+        listArray.add(new MenuHome("Thông tin tài khoản",thongtintkIcon));
         doimatkhauIon = BitmapFactory.decodeResource(this.getResources(),R.drawable.doimatkhau);
         listArray.add(new MenuHome("Đổi mật khẩu",doimatkhauIon));
         baivietdadangIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.baiviet);
@@ -305,7 +305,9 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
             case 0:
-
+                Intent account = new Intent(HomeUsers.this,AccountinformationActivity.class);
+                account.putExtra("KeyEmail", Common.userten.getEmail());
+                startActivity(account);
                 break;
             case 1:
                 builder = new AlertDialog.Builder(HomeUsers.this);
