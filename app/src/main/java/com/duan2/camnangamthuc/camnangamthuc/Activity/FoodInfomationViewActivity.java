@@ -7,7 +7,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -46,6 +49,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -172,6 +178,21 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
                         Picasso.with(getBaseContext()).load(foodInfomation.getImage()).into(target);
                     }
                 });
+                fab_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, foodinfoview_name.getText().toString());
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(foodinfoview_infoview.getText().toString()));
+                        Uri bmpUri = getLocalBitmapUri(foodinfoview_imginfoview);
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+                        sendIntent.setType("image/*");
+                        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        startActivity(Intent.createChooser(sendIntent, "Chia sẽ bài viết..."));
+                    }
+                });
                 pDialog.dismiss();
             }
 
@@ -182,6 +203,34 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
         });
 
     }
+    //lấy đường dẫn hình ảnh đưa vào bitmap
+    public Uri getLocalBitmapUri(ImageView imageView) {
+        // Extract Bitmap from ImageView drawable
+        Drawable drawable = imageView.getDrawable();
+        Bitmap bmp = null;
+        if (drawable instanceof BitmapDrawable){
+            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        } else {
+            return null;
+        }
+        // Store image to default external storage directory
+        Uri bmpUri = null;
+        try {
+            // Use methods on Context to access package-specific directories on external storage.
+            // This way, you don't need to request external read/write permission.
+            // See https://youtu.be/5xVh-7ywKpE?t=25m25s
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png"+".jpeg");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG.JPEG, 90, out);
+            out.close();
+            // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
+    }
+
     private void ChayToolBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
