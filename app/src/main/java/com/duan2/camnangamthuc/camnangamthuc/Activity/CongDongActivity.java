@@ -41,7 +41,7 @@ public class CongDongActivity extends AppCompatActivity implements NavigationVie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarcongdong);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutcongdong);
         btnsendlogin = (Button)findViewById(R.id.btnsendlogin);
         btnsendlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +56,7 @@ public class CongDongActivity extends AppCompatActivity implements NavigationVie
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewcongdong);
         navigationView.setNavigationItemSelectedListener(this);
         //khai báo listview menu
         loginIon = BitmapFactory.decodeResource(this.getResources(),R.drawable.login);
@@ -95,7 +95,7 @@ public class CongDongActivity extends AppCompatActivity implements NavigationVie
     }
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutcongdong);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
