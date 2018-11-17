@@ -147,7 +147,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
         gvcongdong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(HomeUsers.this,CongDongActivity.class);
+                Intent intent2 = new Intent(HomeUsers.this,CommunityUserActivity.class);
                 startActivity(intent2);
             }
         });

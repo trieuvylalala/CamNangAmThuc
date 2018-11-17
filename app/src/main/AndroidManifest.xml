@@ -44,7 +44,8 @@
             android:exported="true" />
 
         <activity android:name=".Activity.ViewListUseAdminActivity" />
-        <activity android:name=".Activity.AccountinformationActivity"></activity>
+        <activity android:name=".Activity.AccountinformationActivity" />
+        <activity android:name=".Activity.CommunityUserActivity"></activity>
     </application>
 
 </manifest>
