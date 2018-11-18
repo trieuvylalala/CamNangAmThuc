@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +7,10 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activity.HomeUsers">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,4 +117,15 @@
         android:id="@+id/recycongdonguse"
         android:scrollbars="vertical">
     </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/recycongdonguse"
+        app:layout_anchorGravity="bottom|right|end"
+        app:fabSize="normal"
+        android:id="@+id/fabaddcongdonguse"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/text_while"
+        android:src="@drawable/ic_playlist_add_black_24dp" />
+</android.support.design.widget.CoordinatorLayout>

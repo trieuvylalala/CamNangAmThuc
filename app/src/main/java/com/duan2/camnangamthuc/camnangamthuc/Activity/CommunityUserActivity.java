@@ -7,7 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
 import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
+import com.duan2.camnangamthuc.camnangamthuc.Model.AddCongDong;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
 import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
@@ -47,17 +50,25 @@ import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
@@ -77,6 +88,11 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
     CircleImageView imglogincongdonguse;
     AlertDialog.Builder builder;
     AlertDialog b;
+    Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 7171;
+    ImageView imgViewadduse;
+    EditText edttenmonanuse,edtnguyenlieuuse,edtcongthucuse;
+    AddCongDong addCongDong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,8 +162,120 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                 startActivity(intent2);
             }
         });
+        //sự kiên thêm
+        FloatingActionButton fabaddcongdonguse = (FloatingActionButton) findViewById(R.id.fabaddcongdonguse);
+        fabaddcongdonguse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder = new AlertDialog.Builder(CommunityUserActivity.this);
+                builder.setTitle("Đăng bài viết chia sẽ");
+                builder.setMessage("Những chia sẽ của bạn sẽ góp phần hữu ích cho cộng đồng");
+                LayoutInflater layoutInflater = CommunityUserActivity.this.getLayoutInflater();
+                final View addfood = layoutInflater.inflate(R.layout.add_congdonguse, null);
+                imgViewadduse= (ImageView) addfood.findViewById(R.id.imgViewadduse);
+                edttenmonanuse = (EditText) addfood.findViewById(R.id.edttenmonanuse);
+                edtnguyenlieuuse = (EditText) addfood.findViewById(R.id.edtnguyenlieuuse);
+                edtcongthucuse = (EditText) addfood.findViewById(R.id.edtcongthucuse);
+                final Button bntchonhinh = (Button) addfood.findViewById(R.id.iconphotoadduse);
+                final Button bntdangbai = (Button) addfood.findViewById(R.id.btndangbaiviet);
+                builder.setView(addfood);
+                builder.setIcon(R.drawable.ic_food_add);
+                final AlertDialog b = builder.create();
+                b.show();
+                bntchonhinh.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        chooseImage();
+                    }
+                });
+                bntdangbai.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AddCommunityfood();
+                        b.dismiss();
+                    }
+                });
+            }
+        });
     }
-    //lấy dữ liệu tên và img đổ ra màng hình
+
+    private void AddCommunityfood() {
+        final StorageReference storageReference;
+        final FirebaseStorage storage;
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Communitys");
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        if (filePath != null) {
+            pDialog = new ProgressDialog(CommunityUserActivity.this);
+            pDialog.setTitle("Đang đăng bài");
+            pDialog.show();
+            final StorageReference imageFolder = storageReference.child("images/" + UUID.randomUUID().toString());
+            imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            addCongDong = new AddCongDong();
+                            String nameusefood=  Common.userten.getName();
+                            String emailusefood =Common.userten.getEmail();
+                            String imageusefood =Common.userten.getImage();
+                            long timefood = new Date().getTime();
+                            addCongDong.setNamefood(edttenmonanuse.getText().toString());
+                            addCongDong.setResourcesfood(edtnguyenlieuuse.getText().toString());
+                            addCongDong.setRecipefood(edtcongthucuse.getText().toString());
+                            addCongDong.setImagefood(uri.toString());
+                            addCongDong.setNameusefood(nameusefood);
+                            addCongDong.setEmailusefood(emailusefood);
+                            addCongDong.setImageusefood(imageusefood);
+                            addCongDong.setTimefood(timefood);
+                            if(addCongDong !=null){
+                                reference.push().setValue(addCongDong);
+                            }
+                        }
+                    });
+                    Toast.makeText(CommunityUserActivity.this, "Đăng bài thành công !!!", Toast.LENGTH_SHORT).show();
+                    pDialog.dismiss();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    pDialog.dismiss();
+                    Toast.makeText(CommunityUserActivity.this, "Lỗi "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("AAAA",e.getMessage());
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double proga = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    pDialog.setMessage("Vui lòng đợi " + (int)proga + "%");
+                }
+            });
+        }
+
+    }
+
+    private void chooseImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Chọn hình ảnh"),PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() !=null){
+            filePath = data.getData();
+            try{
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imgViewadduse.setImageBitmap(bitmap);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
+    }
 
     @Override
     public void onBackPressed() {

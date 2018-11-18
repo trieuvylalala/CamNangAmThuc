@@ -45,4 +45,9 @@
     <string name="ngaysinh">Ngày sinh</string>
     <string name="diachi">Địa chỉ</string>
     <string name="luu">Lưu</string>
+    <string name="tenmonan">Tên món ăn</string>
+    <string name="nguyenlieu">Nguyên liệu</string>
+    <string name="congthuc">Công thức</string>
+    <string name="dangbai">Đăng bài</string>
+    <string name="chonhinh">Chọn hình ảnh</string>
 </resources>
