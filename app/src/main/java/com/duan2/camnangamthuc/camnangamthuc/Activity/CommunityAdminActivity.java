@@ -5,24 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,66 +23,51 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
-import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
-import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
-import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
-import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.MenuHome;
 import com.duan2.camnangamthuc.camnangamthuc.R;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
-public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener {
+public class CommunityAdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener{
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
     Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon;
-    FirebaseDatabase database;
-    DatabaseReference category;
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<Category, HomeViewHoderl> adapter;
     ProgressDialog pDialog;
     LinearLayout gvcamnang, gvcongdong;
-    TextView txtloginad;
-    ImageView imgloginad;
+    TextView txtloginadmin;
+    CircleImageView imgloginadmin;
     AlertDialog.Builder builder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_admin);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_homeadmin);
+        setContentView(R.layout.activity_community_admin);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_congdongadmin);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
-        //Khai báo Firebase
-        database = FirebaseDatabase.getInstance();
-        //Bọc dữ liệu Json
-        category = database.getReference("Category");
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutad);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutcongdongadmin);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_ad);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewcongdongadmin);
         navigationView.setNavigationItemSelectedListener(this);
-        txtloginad  = (TextView) findViewById(R.id.textviewloginad);
-        imgloginad  = (ImageView)findViewById(R.id.imgloginadmin) ;
-        txtloginad.setText(Common.userten.getName());
+        txtloginadmin  = (TextView) findViewById(R.id.txtnamecongdongadmin);
+        imgloginadmin  = (CircleImageView)findViewById(R.id.imglogincongdongadmin) ;
+        txtloginadmin.setText(Common.userten.getName());
         /*Picasso.with(getBaseContext()).load(Common.userten.getImage()).into(imgloginad);*/
-        Glide.with(getApplicationContext()).load(Common.userten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgloginad);
+        Glide.with(getApplicationContext()).load(Common.userten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgloginadmin);
         Paper.init(this);
         //khai báo listview menu
         quanlitktkIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.qltk);
@@ -105,93 +83,34 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         dangxuatIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.dangxau);
         listArray.add(new MenuHome("Đăng xuất", dangxuatIcon));
         //thêm vào adapter
-        listViewMenu = (ListView) findViewById(R.id.listviewmenuad);
+        listViewMenu = (ListView) findViewById(R.id.listviewmenucongdongadmin);
         customView = new CustomView(this, R.layout.dolistviewmenu, listArray);
         listViewMenu.setAdapter(customView);
         listViewMenu.setOnItemClickListener(this);
-        //Load dữ liệu ra home
-        recyclerView = (RecyclerView) findViewById(R.id.recyMenuhomead);
-      /*  layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);*/
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(),
-                R.anim.layout_fall);
-        recyclerView.setLayoutAnimation(controller);
-        gvcamnang = (LinearLayout) findViewById(R.id.gv_camnagad);
-        gvcamnang.setBackgroundResource(R.drawable.bachgrounk_item_list);
+
+        gvcamnang = (LinearLayout) findViewById(R.id.gv_camnagadminpaster);
         gvcamnang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeAdmin.this, HomeAdmin.class);
+                Intent intent = new Intent(CommunityAdminActivity.this, HomeAdmin.class);
                 startActivity(intent);
 
             }
         });
-        gvcongdong = (LinearLayout) findViewById(R.id.gv_congdongad);
+        gvcongdong = (LinearLayout) findViewById(R.id.gv_congdongadminpaster);
+        gvcongdong.setBackgroundResource(R.drawable.bachgrounk_item_list);
         gvcongdong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(HomeAdmin.this, CommunityAdminActivity.class);
+                Intent intent2 = new Intent(CommunityAdminActivity.this, CommunityAdminActivity.class);
                 startActivity(intent2);
             }
         });
 
-        //kiểm tra xem đã kết nối internet hay chưa
-        //khi có internet sẽ khởi chạy ViewFlipper và ActionBar
-        if (CheckInternet.haveNetworkConnection(this)) {
-            //load dialog
-            pDialog = new ProgressDialog(HomeAdmin.this);
-            pDialog.setCancelable(false);
-            pDialog.setMessage("Đang tải dữ liệu...");
-            pDialog.show();
-            Runnable progressRunnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    loadMenu();
-                }
-            };
-            //set thời gian load dialog
-            Handler pdCanceller = new Handler();
-            pdCanceller.postDelayed(progressRunnable, 1500);
-        } else {
-            CheckInternet.ThongBao(this, "Vui lòng kết nối internet");
-        }
     }
-
-    //lấy dữ liệu tên và img đổ ra màng hình
-    private void loadMenu() {
-        adapter = new FirebaseRecyclerAdapter<Category, HomeViewHoderl>(Category.class, R.layout.item_menu, HomeViewHoderl.class, category) {
-            @Override
-            protected void populateViewHolder(HomeViewHoderl viewHolder, Category model, int position) {
-                viewHolder.txtMenụView.setText(model.getName());
-                Picasso.with(getBaseContext()).load(model.getImage()).into(viewHolder.imgMenuView);
-                final Category clickitem = model;
-                //sử lý sự kiện click cho dư liệu đổ về
-                viewHolder.setItemListener(new ItemClickListerner() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        //get id của Category và gửi qua activity mới
-                        //Log.d("", "onClick: " +adapter.getRef(position).getKey());
-                        Intent foodIntent = new Intent(HomeAdmin.this, FoodActivity.class);
-                        Common.categorygetten = clickitem;
-                        //lấy id của Category là key,vì vậy lấy key để chỉ item
-                        foodIntent.putExtra("CategoryId", adapter.getRef(position).getKey());
-                        startActivity(foodIntent);
-                        //Toast.makeText(Home.this, ""+adapter.getRef(position).getKey(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        };
-        recyclerView.setAdapter(adapter);
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-        pDialog.dismiss();
-    }
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutad);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutcongdongadmin);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -210,15 +129,15 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_home) {
-            Intent intent = new Intent(HomeAdmin.this, HomeAdmin.class);
+            Intent intent = new Intent(CommunityAdminActivity.this, HomeAdmin.class);
             startActivity(intent);
             finish();
             return true;
         } if (id == R.id.action_seach) {
-            builder = new AlertDialog.Builder(HomeAdmin.this);
+            builder = new AlertDialog.Builder(CommunityAdminActivity.this);
             builder.setTitle("Nhập tên món cần tìm");
             builder.setMessage("Viết hoa chữ cái đầu tiên || Nhập tên món phải có dấu");
-            LayoutInflater layoutInflater = HomeAdmin.this.getLayoutInflater();
+            LayoutInflater layoutInflater = CommunityAdminActivity.this.getLayoutInflater();
             final View sendcode = layoutInflater.inflate(R.layout.item_seach, null);
             final EditText editseach = (EditText) sendcode.findViewById(R.id.edtseachname);
             final Button bntthoat = (Button) sendcode.findViewById(R.id.btn_thoat);
@@ -241,7 +160,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
                         editseach.requestFocus();
                         return;
                     } else {
-                        Intent foodinfoIntent = new Intent(HomeAdmin.this, LoadSeachActivity.class);
+                        Intent foodinfoIntent = new Intent(CommunityAdminActivity.this, LoadSeachActivity.class);
                         //lấy id của Category là key,vì vậy lấy key để chỉ item
                         foodinfoIntent.putExtra("KeyGet", seach);
                         startActivity(foodinfoIntent);
@@ -269,22 +188,22 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         switch (i) {
             case 0:
-                Intent listusead = new Intent(HomeAdmin.this,ViewListUseAdminActivity.class);
+                Intent listusead = new Intent(CommunityAdminActivity.this,ViewListUseAdminActivity.class);
                 startActivity(listusead);
                 break;
             case 1:
-                Intent account = new Intent(HomeAdmin.this,AccountinformationActivity.class);
+                Intent account = new Intent(CommunityAdminActivity.this,AccountinformationActivity.class);
                 account.putExtra("KeyEmail", Common.userten.getEmail());
                 startActivity(account);
                 break;
             case 2:
-                Intent status = new Intent(HomeAdmin.this,PostedarticleActivity.class);
+                Intent status = new Intent(CommunityAdminActivity.this,PostedarticleActivity.class);
                 status.putExtra("StatusEmail", Common.userten.getEmail());
                 startActivity(status);
                 break;
             case 5:
                 Paper.book().destroy();
-                Intent longoutent = new Intent(HomeAdmin.this,Home.class);
+                Intent longoutent = new Intent(CommunityAdminActivity.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(longoutent);
                 break;
