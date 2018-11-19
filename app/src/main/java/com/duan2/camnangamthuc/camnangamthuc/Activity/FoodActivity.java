@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.FoodViewHoder;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
 import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
@@ -35,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class FoodActivity extends AppCompatActivity {
@@ -120,6 +123,8 @@ public class FoodActivity extends AppCompatActivity {
     //đọc dữ liệu food
     private void loadlistFood(String categoryId) {
         final TextView txtthongtintile;
+        final CircleImageView imgviewfoodtoobar;
+        imgviewfoodtoobar = (CircleImageView) findViewById(R.id.imgviewfoodtoobar);
         txtthongtintile = (TextView)findViewById(R.id.toolbar_title_thongtinmon);
         adapter = new FirebaseRecyclerAdapter<Food, FoodViewHoder>(Food.class,R.layout.item_food,FoodViewHoder.class,
                 foodlist.orderByChild("menuId").equalTo(categoryId)){//tìm kiếm : select * from Food where MenuId
@@ -131,6 +136,7 @@ public class FoodActivity extends AppCompatActivity {
                 txtthongtintile.setText(Common.categorygetten.getName());
                 txtthongtintile.setSingleLine(true);
                 txtthongtintile.setEllipsize(TextUtils.TruncateAt.END);
+                Glide.with(getApplicationContext()).load(Common.categorygetten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgviewfoodtoobar);
                 final Food local = model;
                 viewHolder.setItemListener(new ItemClickListerner() {
                     @Override

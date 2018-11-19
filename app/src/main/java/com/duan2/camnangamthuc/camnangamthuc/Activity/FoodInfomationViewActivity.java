@@ -30,6 +30,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.FoodInfomation;
@@ -55,6 +57,8 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FoodInfomationViewActivity extends AppCompatActivity {
     TextView foodinfoview_name,foodinfoview_info,foodinfoview_infoview,foodinfoview_happy;
@@ -157,6 +161,8 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
     private void getFoodInfomation(final String foodinfomationId){
         final TextView txtthongtintile;
 //        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/JustDieAlready.ttf");
+        final CircleImageView imgviewfoodinfomationviewtoobar;
+        imgviewfoodinfomationviewtoobar = (CircleImageView) findViewById(R.id.imgviewfoodinfomationviewtoobar);
         txtthongtintile = (TextView)findViewById(R.id.toolbar_title_chitiet);
 //        txtthongtintile.setTypeface(typeface);
         foodInfomationviewlist.child(foodinfomationId).addValueEventListener(new ValueEventListener() {
@@ -172,6 +178,7 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
                 txtthongtintile.setText(Common.foodinfogetten.getName());
                 txtthongtintile.setSingleLine(true);;
                 txtthongtintile.setEllipsize(TextUtils.TruncateAt.END);
+                Glide.with(getApplicationContext()).load(Common.foodinfogetten.getImage()).apply(RequestOptions.circleCropTransform()).into(imgviewfoodinfomationviewtoobar);
                 fab_face.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
