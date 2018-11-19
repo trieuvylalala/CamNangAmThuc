@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,14 +18,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +44,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
+import com.duan2.camnangamthuc.camnangamthuc.Adapter.ViewCommunityUse;
+import com.duan2.camnangamthuc.camnangamthuc.Adapter.ViewStatusHoder;
+import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
+import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Community;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
@@ -57,6 +68,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,7 +88,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
     Bitmap xemdanhgiaIcon,xemtaiveIcon,gopyIcon,huongdanIcon,doimatkhauIon,thongtintkIcon,dangxuatIcon,baivietdadangIcon;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<Category,HomeViewHoderl> adapter;
+    FirebaseRecyclerAdapter<Community,ViewCommunityUse> adapter;
     ProgressDialog pDialog;
     LinearLayout gvcamnang,gvcongdong;
     TextView txtviewcongdonguse;
@@ -88,10 +100,17 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
     ImageView imgViewadduse;
     EditText edttenmonanuse,edtnguyenlieuuse,edtcongthucuse;
     Community addCongDong;
+    AlertDialog dialogwaching;
+    FirebaseDatabase database;
+    DatabaseReference congdonglist;
+    String statusfood= "Đã phê duyệt";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_user);
+        database = FirebaseDatabase.getInstance();
+        //Bọc dữ liệu Json
+        congdonglist = database.getReference("Communitys");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_congdonguser);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -132,13 +151,13 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
         listViewMenu.setAdapter(customView);
         listViewMenu.setOnItemClickListener(this);
         //Load dữ liệu ra home
-/*        recyclerView = (RecyclerView)findViewById(R.id.recyMenuhomeuse);
-      *//*  layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);*//*
-        recyclerView.setLayoutManager(new GridLayoutManager(this ,2));
+        recyclerView = (RecyclerView)findViewById(R.id.recycongdonguse);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(),
                 R.anim.layout_fall);
-        recyclerView.setLayoutAnimation(controller);*/
+        recyclerView.setLayoutAnimation(controller);
         gvcamnang =(LinearLayout)findViewById(R.id.gv_camnagusepaster);
         gvcamnang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +176,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                 startActivity(intent2);
             }
         });
+
         //sự kiên thêm
         FloatingActionButton fabaddcongdonguse = (FloatingActionButton) findViewById(R.id.fabaddcongdonguse);
         fabaddcongdonguse.setOnClickListener(new View.OnClickListener() {
@@ -192,8 +212,57 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                 });
             }
         });
-    }
+        if (CheckInternet.haveNetworkConnection(this)){
+            //load dialog
+            dialogwaching = new SpotsDialog(CommunityUserActivity.this);
+            dialogwaching.show();
+            Runnable progressRunnable = new Runnable() {
 
+                @Override
+                public void run() {
+                        if (!statusfood.isEmpty()) {
+                            loadMenuCongdong(statusfood);
+                        }
+                }
+            };
+            //set thời gian load dialog
+            Handler pdCanceller = new Handler();
+            pdCanceller.postDelayed(progressRunnable, 1500);
+        }else {
+            CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
+        }
+    }
+    //lấy dữ liệu tên và img đổ ra màng hình
+    private void loadMenuCongdong(String statusfood) {
+        adapter = new FirebaseRecyclerAdapter<Community,ViewCommunityUse>(Community.class,R.layout.item_viewcongdong,ViewCommunityUse.class,
+                congdonglist.orderByChild("statusfood").equalTo(statusfood)){//tìm kiếm : select * from Food where emailusefood
+            @Override
+            protected void populateViewHolder(ViewCommunityUse viewHolder, Community model, int position) {
+                viewHolder.txtnamefoodcongdong.setText(model.getNamefood());
+                viewHolder.txtnamefoodcongdong.setMaxLines(1);
+                viewHolder.txtnamefoodcongdong.setEllipsize(TextUtils.TruncateAt.END);
+                viewHolder.txtnamecongdonguse.setText(model.getNameusefood());
+                viewHolder.txtngaydangcongdong.setText(DateFormat.format("Đã đăng:"+"(HH:mm:ss) dd-MM-yyyy", model.getTimefood()));
+                Picasso.with(getBaseContext()).load(model.getImagefood()).into(viewHolder.viewimagecongdonguse);
+                Glide.with(getApplicationContext()).load(model.getImageusefood()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imageusecongdong);
+                final Community community = model;
+                viewHolder.setItemListener(new ItemClickListerner() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        Intent foodinfoIntent = new Intent(CommunityUserActivity.this,ViewPosterActivity.class);
+                        Common.communityten = community;
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        foodinfoIntent.putExtra("StatusId",adapter.getRef(position).getKey());
+                        startActivity(foodinfoIntent);
+                    }
+                });
+            }
+        };
+        //set adapter
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+        dialogwaching.dismiss();
+    }
     private void AddCommunityfood() {
         final StorageReference storageReference;
         final FirebaseStorage storage;
@@ -467,7 +536,6 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
             case 2:
                 Intent status = new Intent(CommunityUserActivity.this,PostedarticleActivity.class);
                 status.putExtra("StatusEmail", Common.userten.getEmail());
-                status.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(status);
                 break;
             case 5:
