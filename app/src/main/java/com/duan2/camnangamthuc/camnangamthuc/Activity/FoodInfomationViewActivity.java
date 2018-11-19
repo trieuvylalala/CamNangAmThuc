@@ -241,23 +241,4 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menutt, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_menutt) {
-            Intent intent = new Intent(FoodInfomationViewActivity.this,Home.class);
-            startActivity(intent);
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

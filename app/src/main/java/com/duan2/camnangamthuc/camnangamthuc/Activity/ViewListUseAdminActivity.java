@@ -130,7 +130,7 @@ public class ViewListUseAdminActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String xoa = "Bạn có muốn xóa tài khoản của <font color='red'> <Strong>"+ model.getName()+ "</Strong></font> ra khỏi danh sách không";
                         AlertDialog.Builder dialogxoa = new AlertDialog.Builder(ViewListUseAdminActivity.this);
-                        dialogxoa.setTitle("Xóa tài khỉan");
+                        dialogxoa.setTitle("Xóa tài khỏan");
                         dialogxoa.setIcon(R.drawable.ic_delete_use);
                         dialogxoa.setMessage(Html.fromHtml(xoa));
                         dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {

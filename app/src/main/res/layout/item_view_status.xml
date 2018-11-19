@@ -15,10 +15,17 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/viewimagecongdonguse"
+            android:id="@+id/imageviewstatus"
             android:scaleType="centerCrop"
             android:layout_weight="4"
             android:src="@drawable/suonnuong"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="trang thái"
+            android:textStyle="bold"
+            android:id="@+id/statusview"
+            android:layout_gravity="right"/>
         <LinearLayout
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
@@ -34,31 +41,38 @@
             >
             <ImageView
                 android:layout_width="0dp"
-                android:id="@+id/likefood"
+                android:id="@+id/likefoodstatus"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_like_food"/>
             <ImageView
-                android:id="@+id/commentfood"
+                android:id="@+id/commentfoodstatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_comment_food"/>
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:id="@+id/txtnamefoodcongdong"
-            android:textColor="@color/colorPrimary"
-            android:shadowColor="@color/colorTextName"
-            android:text="Name of Menu"
-            android:textSize="20dp"
-            android:shadowDx="-2"
-            android:shadowDy="-2"
-            android:shadowRadius="2"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:id="@+id/txtnamefoodstatus"
+                android:textColor="@color/colorPrimary"
+                android:shadowColor="@color/colorTextName"
+                android:text="Name of Menu"
+                android:textSize="20dp"
+                android:shadowDx="-2"
+                android:shadowDy="-2"
+                android:shadowRadius="2"
+                android:textStyle="bold" />
         </LinearLayout>
+        <View
+            android:id="@+id/viewaccount"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:background="@color/grey_font"
+            android:layout_height="1dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -72,7 +86,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/imageusecongdong"
+                android:id="@+id/imageusestatus"
                 android:src="@drawable/logo"/>
             <TextView
                 android:layout_marginLeft="5dp"
@@ -85,7 +99,7 @@
                 android:textSize="17dp"
                 android:shadowDx="-2"
                 android:shadowDy="-2"
-                android:id="@+id/txtnamecongdonguse"
+                android:id="@+id/txtnamestatus"
                 android:shadowRadius="2"
                 android:textStyle="bold" />
             <TextView
@@ -95,7 +109,7 @@
                 android:layout_weight="3"
                 android:textColor="@color/colorTextName"
                 android:text="Đã đăng"
-                android:id="@+id/txtngaydangcongdong"
+                android:id="@+id/txtngaydangstatus"
                 android:textSize="13dp"
                 android:textStyle="bold" />
         </LinearLayout>

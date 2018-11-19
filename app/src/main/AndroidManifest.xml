@@ -45,7 +45,9 @@
 
         <activity android:name=".Activity.ViewListUseAdminActivity" />
         <activity android:name=".Activity.AccountinformationActivity" />
-        <activity android:name=".Activity.CommunityUserActivity"></activity>
+        <activity android:name=".Activity.CommunityUserActivity" />
+        <activity android:name=".Activity.PostedarticleActivity" />
+        <activity android:name=".Activity.ViewPosterActivity"></activity>
     </application>
 
 </manifest>

@@ -2,11 +2,11 @@ package com.duan2.camnangamthuc.camnangamthuc.Activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,16 +16,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,10 +37,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.HomeViewHoderl;
-import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
-import com.duan2.camnangamthuc.camnangamthuc.Model.AddCongDong;
+import com.duan2.camnangamthuc.camnangamthuc.Model.Community;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Category;
-import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.MenuHome;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Users;
@@ -61,7 +57,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,7 +87,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
     private final int PICK_IMAGE_REQUEST = 7171;
     ImageView imgViewadduse;
     EditText edttenmonanuse,edtnguyenlieuuse,edtcongthucuse;
-    AddCongDong addCongDong;
+    Community addCongDong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,10 +211,12 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                     imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            addCongDong = new AddCongDong();
+                            addCongDong = new Community();
                             String nameusefood=  Common.userten.getName();
                             String emailusefood =Common.userten.getEmail();
                             String imageusefood =Common.userten.getImage();
+                            String id = reference.push().getKey();
+                            String status = "Đang chờ phê duyệt";
                             long timefood = new Date().getTime();
                             addCongDong.setNamefood(edttenmonanuse.getText().toString());
                             addCongDong.setResourcesfood(edtnguyenlieuuse.getText().toString());
@@ -228,13 +225,34 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                             addCongDong.setNameusefood(nameusefood);
                             addCongDong.setEmailusefood(emailusefood);
                             addCongDong.setImageusefood(imageusefood);
+                            addCongDong.setStatusfood(status);
                             addCongDong.setTimefood(timefood);
+                            addCongDong.setId(id);
                             if(addCongDong !=null){
-                                reference.push().setValue(addCongDong);
+                                reference.child(id).setValue(addCongDong);
                             }
                         }
                     });
-                    Toast.makeText(CommunityUserActivity.this, "Đăng bài thành công !!!", Toast.LENGTH_SHORT).show();
+                    String dang = "Bạn đã đăng bài <font color='red'> <Strong>"+ edttenmonanuse.getText().toString()+ "</Strong></font>thành công và đang chờ phê duyệt";
+                    AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommunityUserActivity.this);
+                    dialogxoa.setTitle("Đăng bài viết");
+                    dialogxoa.setIcon(R.drawable.ic_status);
+                    dialogxoa.setMessage(Html.fromHtml(dang));
+                    dialogxoa.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //lấy vị trí hiện tại
+                        }
+                    });
+                    dialogxoa.setNegativeButton("Xem bài", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intentxembai = new Intent(CommunityUserActivity.this,PostedarticleActivity.class);
+                            intentxembai.putExtra("StatusEmail", Common.userten.getEmail());
+                            startActivity(intentxembai);
+                        }
+                    });
+                    dialogxoa.show();
                     pDialog.dismiss();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -447,6 +465,10 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                 });
                 break;
             case 2:
+                Intent status = new Intent(CommunityUserActivity.this,PostedarticleActivity.class);
+                status.putExtra("StatusEmail", Common.userten.getEmail());
+                status.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(status);
                 break;
             case 5:
                 sendEmail();

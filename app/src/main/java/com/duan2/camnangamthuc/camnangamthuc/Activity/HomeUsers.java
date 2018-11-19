@@ -374,6 +374,9 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                 });
                 break;
             case 2:
+                Intent status = new Intent(HomeUsers.this,PostedarticleActivity.class);
+                status.putExtra("StatusEmail", Common.userten.getEmail());
+                startActivity(status);
                 break;
             case 5:
                 sendEmail();

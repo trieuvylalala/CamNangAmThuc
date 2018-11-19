@@ -5,6 +5,7 @@ public class Common {
     public static Food foodgetten;
     public static FoodInfomation foodinfogetten;
     public static Users userten;
+    public static Community communityten;
     final public static String USE_KEY = "Email";
     final public static String PAW_KEY = "Password";
 }

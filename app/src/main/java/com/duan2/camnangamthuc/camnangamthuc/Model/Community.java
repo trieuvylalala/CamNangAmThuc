@@ -1,14 +1,15 @@
 package com.duan2.camnangamthuc.camnangamthuc.Model;
 import java.util.Date;
 
-public class AddCongDong {
-    public String namefood,imagefood,resourcesfood,recipefood,nameusefood,emailusefood,imageusefood;
+public class Community {
+    public String id,namefood,imagefood,resourcesfood,recipefood,nameusefood,emailusefood,imageusefood,statusfood;
     public long timefood;
 
-    public AddCongDong() {
+    public Community() {
     }
 
-    public AddCongDong(String namefood, String imagefood, String resourcesfood, String recipefood, String nameusefood, String emailusefood, String imageusefood, long timefood) {
+    public Community(String id,String namefood, String imagefood, String resourcesfood, String recipefood, String nameusefood, String emailusefood, String imageusefood,String statusfood , long timefood) {
+        this.id = id;
         this.namefood = namefood;
         this.imagefood = imagefood;
         this.resourcesfood = resourcesfood;
@@ -16,7 +17,16 @@ public class AddCongDong {
         this.nameusefood = nameusefood;
         this.emailusefood = emailusefood;
         this.imageusefood = imageusefood;
+        this.statusfood = statusfood;
         this.timefood = timefood;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNamefood() {
@@ -77,6 +87,14 @@ public class AddCongDong {
 
     public long getTimefood() {
         return timefood;
+    }
+
+    public String getStatusfood() {
+        return statusfood;
+    }
+
+    public void setStatusfood(String statusfood) {
+        this.statusfood = statusfood;
     }
 
     public void setTimefood(long timefood) {
