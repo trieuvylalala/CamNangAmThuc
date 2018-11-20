@@ -51,4 +51,10 @@
     <string name="dangbai">Đăng bài</string>
     <string name="chonhinh">Chọn hình ảnh</string>
     <string name="status">Bài viết đã đăng</string>
+    <string name="Approved">Bài viết đang chờ</string>
+    <string name="pheduyet">Phê duyệt</string>
+    <array name="namespheduyet">
+        <item>Đang chờ phê duyệt</item>
+        <item>Đã phê duyệt</item>
+    </array>
 </resources>

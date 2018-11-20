@@ -55,7 +55,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
-    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon;
+    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon,pheduyetIcon;
     FirebaseDatabase database;
     DatabaseReference category;
     RecyclerView recyclerView;
@@ -100,6 +100,8 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
         listArray.add(new MenuHome("Bài viết đã đăng", baivietdadangIcon));
         xemdanhgiaIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.danhgia);
         listArray.add(new MenuHome("Xem đánh dấu", xemdanhgiaIcon));
+        pheduyetIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.pheduyet);
+        listArray.add(new MenuHome("Bài viết đang chờ", pheduyetIcon));
         xemtaiveIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.taive);
         listArray.add(new MenuHome("Xem tải về", xemtaiveIcon));
         dangxuatIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.dangxau);
@@ -224,6 +226,7 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
             final Button bntthoat = (Button) sendcode.findViewById(R.id.btn_thoat);
             final Button bnttim = (Button) sendcode.findViewById(R.id.btn_tim);
             builder.setView(sendcode);
+            builder.setIcon(R.drawable.ic_seach_showdialog);
             final AlertDialog b = builder.create();
             b.show();
             bntthoat.setOnClickListener(new View.OnClickListener() {
@@ -282,7 +285,11 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
                 status.putExtra("StatusEmail", Common.userten.getEmail());
                 startActivity(status);
                 break;
-            case 5:
+            case 4:
+                Intent approved = new Intent(HomeAdmin.this,StatusApprovedActivity.class);
+                startActivity(approved);
+                break;
+            case 6:
                 Paper.book().destroy();
                 Intent longoutent = new Intent(HomeAdmin.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

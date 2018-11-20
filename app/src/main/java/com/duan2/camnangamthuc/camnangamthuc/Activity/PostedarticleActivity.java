@@ -185,10 +185,10 @@ public class PostedarticleActivity extends AppCompatActivity {
                 viewHolder.deletestatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String xoa = "Bạn có muốn xóa bào viết <font color='blue'> <Strong>"+model.getNamefood() + "</Strong></font> ra khỏi danh sách không";
+                        String xoa = "Bạn có muốn xóa bài viết <font color='blue'> <Strong>"+model.getNamefood() + "</Strong></font> ra khỏi danh sách không";
                         AlertDialog.Builder dialogxoa = new AlertDialog.Builder(PostedarticleActivity.this);
-                        dialogxoa.setTitle("Xóa tài khỉan");
-                        dialogxoa.setIcon(R.drawable.ic_delete_use);
+                        dialogxoa.setTitle("Xóa tài bài viết");
+                        dialogxoa.setIcon(R.drawable.ic_deletestatus);
                         dialogxoa.setMessage(Html.fromHtml(xoa));
                         dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override

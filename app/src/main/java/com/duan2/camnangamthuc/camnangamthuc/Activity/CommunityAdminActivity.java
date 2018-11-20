@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,13 +17,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,10 +42,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.duan2.camnangamthuc.camnangamthuc.Adapter.CustomView;
+import com.duan2.camnangamthuc.camnangamthuc.Adapter.ViewCommunityUse;
+import com.duan2.camnangamthuc.camnangamthuc.Adapter.ViewStatusAdmin;
+import com.duan2.camnangamthuc.camnangamthuc.Interface.ItemClickListerner;
+import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Community;
 import com.duan2.camnangamthuc.camnangamthuc.Model.MenuHome;
 import com.duan2.camnangamthuc.camnangamthuc.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +59,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,13 +67,14 @@ import java.util.Date;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 
 public class CommunityAdminActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemClickListener{
     ListView listViewMenu;
     ArrayList<MenuHome> listArray = new ArrayList<>();
     CustomView customView;
-    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon;
+    Bitmap xemdanhgiaIcon, xemtaiveIcon, quanlitktkIcon, dangxuatIcon, baivietdadangIcon,thongtintkIcon,pheduyetIcon;
     ProgressDialog pDialog;
     LinearLayout gvcamnang, gvcongdong;
     TextView txtloginadmin;
@@ -71,10 +85,20 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
     private final int PICK_IMAGE_REQUEST = 7171;
     ImageView imgViewadduse;
     Community addCongDong;
+    String statusfood= "Đã phê duyệt";
+    AlertDialog dialogwaching;
+    FirebaseDatabase database;
+    DatabaseReference congdonglist;
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    FirebaseRecyclerAdapter<Community,ViewStatusAdmin> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_admin);
+        database = FirebaseDatabase.getInstance();
+        //Bọc dữ liệu Json
+        congdonglist = database.getReference("Communitys");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_congdongadmin);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -103,6 +127,8 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
         listArray.add(new MenuHome("Bài viết đã đăng", baivietdadangIcon));
         xemdanhgiaIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.danhgia);
         listArray.add(new MenuHome("Xem đánh dấu", xemdanhgiaIcon));
+        pheduyetIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.pheduyet);
+        listArray.add(new MenuHome("Bài viết đang chờ", pheduyetIcon));
         xemtaiveIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.taive);
         listArray.add(new MenuHome("Xem tải về", xemtaiveIcon));
         dangxuatIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.dangxau);
@@ -112,7 +138,15 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
         customView = new CustomView(this, R.layout.dolistviewmenu, listArray);
         listViewMenu.setAdapter(customView);
         listViewMenu.setOnItemClickListener(this);
-
+        //
+        recyclerView = (RecyclerView)findViewById(R.id.recycongdongadmin);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(),
+                R.anim.layout_fall);
+        recyclerView.setLayoutAnimation(controller);
+        //
         gvcamnang = (LinearLayout) findViewById(R.id.gv_camnagadminpaster);
         gvcamnang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,8 +199,92 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
                 });
             }
         });
+        if (CheckInternet.haveNetworkConnection(this)){
+            //load dialog
+            dialogwaching = new SpotsDialog(CommunityAdminActivity.this);
+            dialogwaching.show();
+            Runnable progressRunnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    if (!statusfood.isEmpty()) {
+                        loadMenuCongdong(statusfood);
+                    }
+                }
+            };
+            //set thời gian load dialog
+            Handler pdCanceller = new Handler();
+            pdCanceller.postDelayed(progressRunnable, 1500);
+        }else {
+            CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
+        }
 
     }
+    //lấy dữ liệu tên và img đổ ra màng hình
+    private void loadMenuCongdong(String statusfood) {
+        adapter = new FirebaseRecyclerAdapter<Community,ViewStatusAdmin>(Community.class,R.layout.item_viewcongdong_admin,ViewStatusAdmin.class,
+                congdonglist.orderByChild("statusfood").equalTo(statusfood)){//tìm kiếm : select * from Food where emailusefood
+            @Override
+            protected void populateViewHolder(ViewStatusAdmin viewHolder, final Community model, final int position) {
+                viewHolder.txtnamefoodstatusadmin.setText(model.getNamefood());
+                viewHolder.txtnamefoodstatusadmin.setMaxLines(1);
+                viewHolder.txtnamefoodstatusadmin.setEllipsize(TextUtils.TruncateAt.END);
+                viewHolder.txtnamestatusadmin.setText(model.getNameusefood());
+                viewHolder.txtngaydangstatusadmin.setText(DateFormat.format("Đã đăng:"+"(HH:mm:ss) dd-MM-yyyy", model.getTimefood()));
+                Picasso.with(getBaseContext()).load(model.getImagefood()).into(viewHolder.imageviewstatusadmin);
+                Glide.with(getApplicationContext()).load(model.getImageusefood()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imageusestatusadmin);
+                final Community community = model;
+                viewHolder.setItemListener(new ItemClickListerner() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        Intent foodinfoIntent = new Intent(CommunityAdminActivity.this,ViewPosterActivity.class);
+                        Common.communityten = community;
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        foodinfoIntent.putExtra("StatusId",adapter.getRef(position).getKey());
+                        startActivity(foodinfoIntent);
+                    }
+                });
+                viewHolder.deletestatusadmin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String xoa = "Bạn có muốn xóa bài viết <font color='green'> <Strong>"+model.getNamefood() + "</Strong></font> ra khỏi danh sách không";
+                        AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommunityAdminActivity.this);
+                        dialogxoa.setTitle("Xóa tài bài viết");
+                        dialogxoa.setIcon(R.drawable.ic_deletestatus);
+                        dialogxoa.setMessage(Html.fromHtml(xoa));
+                        dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //lấy vị trí hiện tại
+                                deletestatusadmin(adapter.getRef(position).getKey());
+                            }
+                        });
+                        dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        dialogxoa.show();
+
+                    }
+                });
+            }
+        };
+        //set adapter
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+        dialogwaching.dismiss();
+    }
+
+    private void deletestatusadmin(String key) {
+        //xóa vị trí đã lấy ra khỏi database
+        congdonglist.child(key).removeValue();
+        Toast.makeText(this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+        Intent homeinteen = new Intent(CommunityAdminActivity.this,CommunityAdminActivity.class);
+        startActivity(homeinteen);
+    }
+
     private void AddCommunityfood() {
         final StorageReference storageReference;
         final FirebaseStorage storage;
@@ -359,7 +477,11 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
                 status.putExtra("StatusEmail", Common.userten.getEmail());
                 startActivity(status);
                 break;
-            case 5:
+            case 4:
+                Intent approved = new Intent(CommunityAdminActivity.this,StatusApprovedActivity.class);
+                startActivity(approved);
+                break;
+            case 6:
                 Paper.book().destroy();
                 Intent longoutent = new Intent(CommunityAdminActivity.this,Home.class);
                 longoutent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
