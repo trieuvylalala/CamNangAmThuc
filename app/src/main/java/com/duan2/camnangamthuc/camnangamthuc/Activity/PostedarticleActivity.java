@@ -219,8 +219,6 @@ public class PostedarticleActivity extends AppCompatActivity {
         //xóa vị trí đã lấy ra khỏi database
         statuslist.child(key).removeValue();
         Toast.makeText(this, "Xóa thành công", Toast.LENGTH_SHORT).show();
-        Intent homeinteen = new Intent(PostedarticleActivity.this,PostedarticleActivity.class);
-        startActivity(homeinteen);
     }
 
     //sửa thông tin

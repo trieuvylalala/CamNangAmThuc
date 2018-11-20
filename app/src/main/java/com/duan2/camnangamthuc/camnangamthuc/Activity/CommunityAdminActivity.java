@@ -171,7 +171,7 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
             public void onClick(View view) {
                 builder = new AlertDialog.Builder(CommunityAdminActivity.this);
                 builder.setTitle("Đăng bài viết chia sẽ");
-                builder.setMessage("Những chia sẽ của bạn sẽ góp phần hữu ích cho cộng đồng");
+                builder.setMessage("Lưu ý hình ảnh của bạn chiều dài phải nhỏ hơn chìu rộng|| kích cở chuẩn 500 trở lại ||  không phù hợp kích thước sẽ làm xấu giao diện");
                 LayoutInflater layoutInflater = CommunityAdminActivity.this.getLayoutInflater();
                 final View addfood = layoutInflater.inflate(R.layout.add_congdonguse, null);
                 imgViewadduse= (ImageView) addfood.findViewById(R.id.imgViewadduse);
@@ -281,8 +281,6 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
         //xóa vị trí đã lấy ra khỏi database
         congdonglist.child(key).removeValue();
         Toast.makeText(this, "Xóa thành công", Toast.LENGTH_SHORT).show();
-        Intent homeinteen = new Intent(CommunityAdminActivity.this,CommunityAdminActivity.class);
-        startActivity(homeinteen);
     }
 
     private void AddCommunityfood() {

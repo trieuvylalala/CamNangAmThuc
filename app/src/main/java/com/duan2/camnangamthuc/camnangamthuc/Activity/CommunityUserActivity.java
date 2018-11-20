@@ -184,7 +184,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
             public void onClick(View view) {
                 builder = new AlertDialog.Builder(CommunityUserActivity.this);
                 builder.setTitle("Đăng bài viết chia sẽ");
-                builder.setMessage("Những chia sẽ của bạn sẽ góp phần hữu ích cho cộng đồng");
+                builder.setMessage("Lưu ý hình ảnh của bạn chiều dài phải nhỏ hơn chìu rộng|| kích cở chuẩn 500 trở lại || không phù hợp kích thước sẽ làm xấu giao diện");
                 LayoutInflater layoutInflater = CommunityUserActivity.this.getLayoutInflater();
                 final View addfood = layoutInflater.inflate(R.layout.add_congdonguse, null);
                 imgViewadduse= (ImageView) addfood.findViewById(R.id.imgViewadduse);
