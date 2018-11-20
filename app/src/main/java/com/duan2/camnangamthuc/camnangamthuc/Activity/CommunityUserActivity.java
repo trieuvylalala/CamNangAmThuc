@@ -302,7 +302,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                             }
                         }
                     });
-                    String dang = "Bạn đã đăng bài <font color='red'> <Strong>"+ edttenmonanuse.getText().toString()+ "</Strong></font>thành công và đang chờ phê duyệt";
+                    String dang = "Bạn đã đăng bài <font color='red'> <Strong>"+ edttenmonanuse.getText().toString()+ "</Strong></font> thành công và đang chờ phê duyệt";
                     AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommunityUserActivity.this);
                     dialogxoa.setTitle("Đăng bài viết");
                     dialogxoa.setIcon(R.drawable.ic_status);

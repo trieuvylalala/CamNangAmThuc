@@ -9,9 +9,30 @@
     android:layout_margin="10dp">
     <LinearLayout
         android:orientation="vertical"
-        android:weightSum="5"
+        android:weightSum="6"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="right"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_editstatus"
+                android:id="@+id/editstatus"
+                android:layout_marginRight="20dp"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_deletestatus"
+                android:id="@+id/deletestatus"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -127,5 +127,5 @@
         android:id="@+id/fabaddcongdongadmin"
         android:layout_margin="10dp"
         android:backgroundTint="@color/text_while"
-        android:src="@drawable/ic_playlist_add_black_24dp" />
+        android:src="@drawable/ic_addfoodadmin" />
 </android.support.design.widget.CoordinatorLayout>

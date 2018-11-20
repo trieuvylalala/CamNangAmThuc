@@ -18,6 +18,8 @@ public class ViewStatusHoder extends RecyclerView.ViewHolder implements View.OnC
     public ImageView imageviewstatus;
     public ImageView likefoodstatus;
     public ImageView commentfoodstatus;
+    public ImageView editstatus;
+    public ImageView deletestatus;
     public CircleImageView imageusestatus;
     private ItemClickListerner itemClickListerner;
     public ViewStatusHoder(View itemView) {
@@ -29,6 +31,8 @@ public class ViewStatusHoder extends RecyclerView.ViewHolder implements View.OnC
         imageviewstatus = (ImageView)itemView.findViewById(R.id.imageviewstatus);
         likefoodstatus = (ImageView)itemView.findViewById(R.id.likefoodstatus);
         commentfoodstatus = (ImageView)itemView.findViewById(R.id.commentfoodstatus);
+        editstatus = (ImageView)itemView.findViewById(R.id.editstatus);
+        deletestatus = (ImageView)itemView.findViewById(R.id.deletestatus);
         imageusestatus = (CircleImageView) itemView.findViewById(R.id.imageusestatus);
         itemView.setOnClickListener(this);
     }

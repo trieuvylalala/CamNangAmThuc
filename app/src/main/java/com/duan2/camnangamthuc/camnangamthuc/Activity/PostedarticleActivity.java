@@ -2,9 +2,14 @@ package com.duan2.camnangamthuc.camnangamthuc.Activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,10 +18,16 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -28,11 +39,21 @@ import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Community;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Food;
+import com.duan2.camnangamthuc.camnangamthuc.Model.Users;
 import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -46,6 +67,15 @@ public class PostedarticleActivity extends AppCompatActivity {
     FirebaseRecyclerAdapter<Community,ViewStatusHoder> adapter;
     ProgressDialog pDialog;
     AlertDialog dialogwaching;
+    Button btn_xoatkaccount,btn_editaccount;
+    AlertDialog.Builder builder;
+    AlertDialog b;
+    EditText edttenmonanuse,edtnguyenlieuuse,edtcongthucuse;
+    ImageView imgViewadduse;
+    Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 7171;
+    StorageReference storageReference;
+    FirebaseStorage storage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +83,8 @@ public class PostedarticleActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         //Bọc dữ liệu Json
         statuslist = database.getReference("Communitys");
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         toolbar = (Toolbar) findViewById(R.id.toolbar_status);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -119,7 +151,7 @@ public class PostedarticleActivity extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<Community,ViewStatusHoder>(Community.class,R.layout.item_view_status,ViewStatusHoder.class,
                 statuslist.orderByChild("emailusefood").equalTo(statusEmail)){//tìm kiếm : select * from Food where emailusefood
             @Override
-            protected void populateViewHolder(ViewStatusHoder viewHolder, Community model, int position) {
+            protected void populateViewHolder(ViewStatusHoder viewHolder, final Community model, final int position) {
                 viewHolder.txtnamefoodstatus.setText(model.getNamefood());
                 viewHolder.txtnamefoodstatus.setMaxLines(1);
                 viewHolder.txtnamefoodstatus.setEllipsize(TextUtils.TruncateAt.END);
@@ -144,6 +176,37 @@ public class PostedarticleActivity extends AppCompatActivity {
                         startActivity(foodinfoIntent);
                     }
                 });
+                viewHolder.editstatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updatetstatus(adapter.getRef(position).getKey(),adapter.getItem(position));
+                    }
+                });
+                viewHolder.deletestatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String xoa = "Bạn có muốn xóa bào viết <font color='blue'> <Strong>"+model.getNamefood() + "</Strong></font> ra khỏi danh sách không";
+                        AlertDialog.Builder dialogxoa = new AlertDialog.Builder(PostedarticleActivity.this);
+                        dialogxoa.setTitle("Xóa tài khỉan");
+                        dialogxoa.setIcon(R.drawable.ic_delete_use);
+                        dialogxoa.setMessage(Html.fromHtml(xoa));
+                        dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //lấy vị trí hiện tại
+                                deletestatus(adapter.getRef(position).getKey());
+                            }
+                        });
+                        dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        dialogxoa.show();
+
+                    }
+                });
             }
         };
         //set adapter
@@ -151,4 +214,110 @@ public class PostedarticleActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         dialogwaching.dismiss();
     }
+//xóa
+    private void deletestatus(String key) {
+        //xóa vị trí đã lấy ra khỏi database
+        statuslist.child(key).removeValue();
+        Toast.makeText(this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+        Intent homeinteen = new Intent(PostedarticleActivity.this,PostedarticleActivity.class);
+        startActivity(homeinteen);
+    }
+
+    //sửa thông tin
+    private void updatetstatus(final String key, final Community item) {
+        builder = new AlertDialog.Builder(PostedarticleActivity.this);
+        builder.setTitle("Chỉnh sữa bài viết chia sẽ");
+        builder.setMessage("Nhập thông tin chỉnh sữa bên dưới");
+        LayoutInflater layoutInflater = PostedarticleActivity.this.getLayoutInflater();
+        final View addfood = layoutInflater.inflate(R.layout.add_congdonguse, null);
+        imgViewadduse= (ImageView) addfood.findViewById(R.id.imgViewadduse);
+        edttenmonanuse = (EditText) addfood.findViewById(R.id.edttenmonanuse);
+        edtnguyenlieuuse = (EditText) addfood.findViewById(R.id.edtnguyenlieuuse);
+        edtcongthucuse = (EditText) addfood.findViewById(R.id.edtcongthucuse);
+        final Button bntchonhinh = (Button) addfood.findViewById(R.id.iconphotoadduse);
+        final Button bntdangbai = (Button) addfood.findViewById(R.id.btndangbaiviet);
+        builder.setView(addfood);
+        builder.setIcon(R.drawable.ic_editstatus);
+        final AlertDialog b = builder.create();
+        b.show();
+        edttenmonanuse.setText(item.getNamefood());
+        edtnguyenlieuuse.setText(item.getResourcesfood());
+        edtcongthucuse.setText(item.getRecipefood());
+        Picasso.with(getBaseContext()).load(item.getImagefood()).into(imgViewadduse);
+        bntchonhinh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseImage();
+            }
+        });
+        bntdangbai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                item.setNamefood(edttenmonanuse.getText().toString());
+                item.setResourcesfood(edtnguyenlieuuse.getText().toString());
+                item.setRecipefood(edtcongthucuse.getText().toString());
+                Uploadimage(key,item);
+                statuslist.child(key).setValue(item);
+                Toast.makeText(PostedarticleActivity.this, "Cập nhật thành công !!!", Toast.LENGTH_SHORT).show();
+                b.dismiss();
+            }
+        });
+    }
+    private void chooseImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,"Chọn hình ảnh"),PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() !=null){
+            filePath = data.getData();
+            try{
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imgViewadduse.setImageBitmap(bitmap);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+    //cập nhật hình ảnh
+    private void Uploadimage(final String key, final Community community){
+        if (filePath != null) {
+            pDialog = new ProgressDialog(PostedarticleActivity.this);
+            pDialog.setTitle("Đang cập nhật");
+            pDialog.show();
+            final StorageReference imageFolder = storageReference.child("images/" + UUID.randomUUID().toString());
+            imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            community.setImagefood(uri.toString());
+                            statuslist.child(key).setValue(community);
+                        }
+                    });
+                    pDialog.dismiss();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    pDialog.dismiss();
+                    Toast.makeText(PostedarticleActivity.this, "Lỗi "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("AAAA",e.getMessage());
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double proga = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    pDialog.setMessage("Vui lòng đợi " + (int)proga + "%");
+                }
+            });
+        }
+    }
+
 }
