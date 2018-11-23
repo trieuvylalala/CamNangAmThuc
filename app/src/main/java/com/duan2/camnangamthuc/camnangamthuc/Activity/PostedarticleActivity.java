@@ -222,6 +222,8 @@ public class PostedarticleActivity extends AppCompatActivity {
         edttenmonanuse.setText(item.getNamefood());
         edtnguyenlieuuse.setText(item.getResourcesfood());
         edtcongthucuse.setText(item.getRecipefood());
+        final String name = Common.userten.getName();
+        final String image = Common.userten.getImage();
         Picasso.with(getBaseContext()).load(item.getImagefood()).into(imgViewadduse);
         bntchonhinh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +234,8 @@ public class PostedarticleActivity extends AppCompatActivity {
         bntdangbai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                item.setNameusefood(name);
+                item.setImageusefood(image);
                 item.setNamefood(edttenmonanuse.getText().toString());
                 item.setResourcesfood(edtnguyenlieuuse.getText().toString());
                 item.setRecipefood(edtcongthucuse.getText().toString());

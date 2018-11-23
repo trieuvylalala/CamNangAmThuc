@@ -237,7 +237,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
         adapter = new FirebaseRecyclerAdapter<Community,ViewCommunityUse>(Community.class,R.layout.item_viewcongdong,ViewCommunityUse.class,
                 congdonglist.orderByChild("statusfood").equalTo(statusfood)){//tìm kiếm : select * from Food where emailusefood
             @Override
-            protected void populateViewHolder(ViewCommunityUse viewHolder, Community model, int position) {
+            protected void populateViewHolder(ViewCommunityUse viewHolder, final Community model, final int position) {
                 viewHolder.txtnamefoodcongdong.setText(model.getNamefood());
                 viewHolder.txtnamefoodcongdong.setMaxLines(1);
                 viewHolder.txtnamefoodcongdong.setEllipsize(TextUtils.TruncateAt.END);
@@ -254,6 +254,16 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                         //lấy id của Category là key,vì vậy lấy key để chỉ item
                         foodinfoIntent.putExtra("StatusId",adapter.getRef(position).getKey());
                         startActivity(foodinfoIntent);
+                    }
+                });
+                viewHolder.commentfood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent commentintent = new Intent(CommunityUserActivity.this,CommentActivity.class);
+                        Common.communityten = model;
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        commentintent.putExtra("commentId",adapter.getRef(position).getKey());
+                        startActivity(commentintent);
                     }
                 });
             }

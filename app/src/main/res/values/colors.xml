@@ -20,4 +20,6 @@
     <color name="colorView">#F3F3F3</color>
     <color name="colorTextName">#1B1B1B</color>
     <color name="colorInputFacebook">#3487E9</color>
+    <color name="backgrountsen">#FF4081</color>
+    <color name="textusecomment">#2727b7</color>
 </resources>

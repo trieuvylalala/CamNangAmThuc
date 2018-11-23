@@ -57,4 +57,5 @@
         <item>Đang chờ phê duyệt</item>
         <item>Đã phê duyệt</item>
     </array>
+    <string name="comment">Viết bình luận...</string>
 </resources>
