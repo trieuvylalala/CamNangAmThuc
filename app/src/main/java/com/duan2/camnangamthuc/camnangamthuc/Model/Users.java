@@ -3,12 +3,13 @@ package com.duan2.camnangamthuc.camnangamthuc.Model;
 import java.io.Serializable;
 
 public class Users implements Serializable {
-    private String code,name,image,phone,email,password,role,ngaysinh,diachi;
+    private String id,code,name,image,phone,email,password,role,ngaysinh,diachi;
 
     public Users() {
     }
 
-    public Users(String code, String name, String image, String phone, String email, String password, String role,String ngaysinh,String diachi) {
+    public Users(String id, String code, String name, String image, String phone, String email, String password, String role, String ngaysinh, String diachi) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.image = image;
@@ -18,6 +19,14 @@ public class Users implements Serializable {
         this.role = role;
         this.ngaysinh = ngaysinh;
         this.diachi = diachi;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCode() {

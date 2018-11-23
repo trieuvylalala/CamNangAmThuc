@@ -294,6 +294,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Uri uri) {
                                                 newuUsers = new Users();
+                                                String id = userslist.push().getKey();
                                                 newuUsers.setName(editname.getText().toString());
                                                 newuUsers.setName(editname.getText().toString());
                                                 newuUsers.setPhone(editphone.getText().toString());
@@ -302,8 +303,9 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 newuUsers.setCode(editcoderes.getText().toString());
                                                 newuUsers.setRole(role);
                                                 newuUsers.setImage(uri.toString());
+                                                newuUsers.setId(id);
                                                 if(newuUsers !=null){
-                                                    userslist.push().setValue(newuUsers);
+                                                    userslist.child(id).setValue(newuUsers);
                                                 }
                                                 Intent loginIntent = new Intent(RegistrationActivity.this,LoginActivity.class);
                                                 loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

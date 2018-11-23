@@ -59,10 +59,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -104,6 +107,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
     FirebaseDatabase database;
     DatabaseReference congdonglist;
     String statusfood= "Đã phê duyệt";
+    boolean like = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,14 +241,17 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
         adapter = new FirebaseRecyclerAdapter<Community,ViewCommunityUse>(Community.class,R.layout.item_viewcongdong,ViewCommunityUse.class,
                 congdonglist.orderByChild("statusfood").equalTo(statusfood)){//tìm kiếm : select * from Food where emailusefood
             @Override
-            protected void populateViewHolder(ViewCommunityUse viewHolder, final Community model, final int position) {
+            protected void populateViewHolder(final ViewCommunityUse viewHolder, final Community model, final int position) {
+                final String keylike = getRef(position).getKey();
                 viewHolder.txtnamefoodcongdong.setText(model.getNamefood());
                 viewHolder.txtnamefoodcongdong.setMaxLines(1);
                 viewHolder.txtnamefoodcongdong.setEllipsize(TextUtils.TruncateAt.END);
                 viewHolder.txtnamecongdonguse.setText(model.getNameusefood());
+                viewHolder.likecountuse.setText(Integer.toString(model.likecount));
                 viewHolder.txtngaydangcongdong.setText(DateFormat.format("Đã đăng:"+"(HH:mm:ss) dd-MM-yyyy", model.getTimefood()));
                 Picasso.with(getBaseContext()).load(model.getImagefood()).into(viewHolder.viewimagecongdonguse);
                 Glide.with(getApplicationContext()).load(model.getImageusefood()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imageusecongdong);
+                viewHolder.setColorLike(keylike);
                 final Community community = model;
                 viewHolder.setItemListener(new ItemClickListerner() {
                     @Override
@@ -264,6 +271,36 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                         //lấy id của Category là key,vì vậy lấy key để chỉ item
                         commentintent.putExtra("commentId",adapter.getRef(position).getKey());
                         startActivity(commentintent);
+                    }
+                });
+                viewHolder.likefood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        like = true;
+                        congdonglist.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(like){
+                                    int likecount =0;
+                                    if(dataSnapshot.child(keylike).hasChild(Common.userten.getId())){
+                                        congdonglist.child(keylike).child(Common.userten.getId()).removeValue();
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        congdonglist.child(model.getId()).child("likecount").setValue(likecount-1);
+                                        like = false;
+                                    }else {
+                                        congdonglist.child(keylike).child(Common.userten.getId()).setValue("Like");
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        congdonglist.child(keylike).child("likecount").setValue(likecount+1);
+                                        like = false;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -307,6 +344,7 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                             addCongDong.setStatusfood(status);
                             addCongDong.setTimefood(timefood);
                             addCongDong.setId(id);
+                            addCongDong.setLikecount(0);
                             if(addCongDong !=null){
                                 reference.child(id).setValue(addCongDong);
                             }

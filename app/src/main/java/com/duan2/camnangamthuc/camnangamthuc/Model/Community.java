@@ -4,11 +4,13 @@ import java.util.Date;
 public class Community {
     public String id,namefood,imagefood,resourcesfood,recipefood,nameusefood,emailusefood,imageusefood,statusfood;
     public long timefood;
+    public int likecount;
 
     public Community() {
     }
 
-    public Community(String id,String namefood, String imagefood, String resourcesfood, String recipefood, String nameusefood, String emailusefood, String imageusefood,String statusfood , long timefood) {
+
+    public Community(String id, String namefood, String imagefood, String resourcesfood, String recipefood, String nameusefood, String emailusefood, String imageusefood, String statusfood, long timefood, int likecount) {
         this.id = id;
         this.namefood = namefood;
         this.imagefood = imagefood;
@@ -19,6 +21,7 @@ public class Community {
         this.imageusefood = imageusefood;
         this.statusfood = statusfood;
         this.timefood = timefood;
+        this.likecount = likecount;
     }
 
     public String getId() {
@@ -99,5 +102,13 @@ public class Community {
 
     public void setTimefood(long timefood) {
         this.timefood = timefood;
+    }
+
+    public int getLikecount() {
+        return likecount;
+    }
+
+    public void setLikecount(int likecount) {
+        this.likecount = likecount;
     }
 }
