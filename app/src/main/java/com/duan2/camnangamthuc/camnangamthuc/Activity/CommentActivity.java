@@ -13,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,7 +50,9 @@ public class CommentActivity extends AppCompatActivity {
     String commentId = "";
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<Comment,ViewComment> adapter;
+    FirebaseRecyclerAdapter<Comment, ViewComment> adapter;
+    EditText editsendcomment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +68,11 @@ public class CommentActivity extends AppCompatActivity {
                 postcomment();
             }
         });
-        recyclerView = (RecyclerView)findViewById(R.id.list_of_comment);
+        recyclerView = (RecyclerView) findViewById(R.id.list_of_comment);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        if (CheckInternet.haveNetworkConnection(this)){
+        if (CheckInternet.haveNetworkConnection(this)) {
             //load dialog
             dialogwaching = new SpotsDialog(CommentActivity.this);
             dialogwaching.show();
@@ -87,30 +91,30 @@ public class CommentActivity extends AppCompatActivity {
             //set thời gian load dialog
             Handler pdCanceller = new Handler();
             pdCanceller.postDelayed(progressRunnable, 1500);
-        }else {
-            CheckInternet.ThongBao(this,"Vui lòng kết nối internet");
+        } else {
+            CheckInternet.ThongBao(this, "Vui lòng kết nối internet");
         }
     }
 
     private void loadComment(String commentId) {
-        adapter = new FirebaseRecyclerAdapter<Comment,ViewComment>(Comment.class,R.layout.item_commnent_list,ViewComment.class,
-                commentlist.orderByChild("commentId").equalTo(commentId)){//tìm kiếm : select * from Food where emailusefood
+        adapter = new FirebaseRecyclerAdapter<Comment, ViewComment>(Comment.class, R.layout.item_commnent_list, ViewComment.class,
+                commentlist.orderByChild("commentId").equalTo(commentId)) {//tìm kiếm : select * from Food where emailusefood
             @Override
-            protected void populateViewHolder(ViewComment viewHolder, final Comment model, final int position) {
+            protected void populateViewHolder(final ViewComment viewHolder, final Comment model, final int position) {
                 viewHolder.comment_user.setText(model.getNameusecomment());
                 viewHolder.comment_test.setText(model.getNamecomment());
                 viewHolder.comment_time.setText(DateFormat.format("(HH:mm:ss) dd-MM-yyyy", model.getTimecomment()));
                 Glide.with(getApplicationContext()).load(model.getImageusecomment()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imgcomment);
                 final Comment comment = model;
                 //nếu như email của tài khoản giống với email của bình luận thì sẽ hiễn thị 2 chức năng xóa và sửa
-                if(Common.userten.getEmail().equals(model.getEmailusecomment())){
+                if (Common.userten.getEmail().equals(model.getEmailusecomment())) {
                     viewHolder.detele_comment.setVisibility(View.VISIBLE);
                     viewHolder.edit_comment.setVisibility(View.VISIBLE);
                     //button sửa
                     viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
+                            updatecomment(adapter.getRef(position).getKey(), adapter.getItem(position));
                         }
                     });
 
@@ -118,7 +122,7 @@ public class CommentActivity extends AppCompatActivity {
                     viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>"+"mình" + "</Strong></font> không";
+                            String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + "mình" + "</Strong></font> không";
                             AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
                             dialogxoa.setTitle("Xóa bình luận");
                             dialogxoa.setIcon(R.drawable.ic_deletestatus);
@@ -140,18 +144,37 @@ public class CommentActivity extends AppCompatActivity {
                         }
                     });
                     //ngược lại email của tài khoản không giống với email của bình luận thì sẽ ẩn 2 chức năng xóa và sửa
-                }else {
+                } else {
                     viewHolder.detele_comment.setVisibility(View.INVISIBLE);
                     viewHolder.edit_comment.setVisibility(View.INVISIBLE);
                 }
                 //nếu như email của tài khoản giống với email của bài viết thì sẽ hiễn thị 2 chức năng xóa và sửa
-                if (Common.userten.getEmail().equals(Common.communityten.getEmailusefood())){
+                if (Common.userten.getEmail().equals(Common.communityten.getEmailusefood())) {
                     viewHolder.detele_comment.setVisibility(View.VISIBLE);
                     viewHolder.edit_comment.setVisibility(View.VISIBLE);
+                    //sự kiện button sửa
+                    viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String xoa = "Bạn bạn không thể sửa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> ";
+                            AlertDialog.Builder dialogsua = new AlertDialog.Builder(CommentActivity.this);
+                            dialogsua.setTitle("Sửa bình luận");
+                            dialogsua.setIcon(R.drawable.ic_editstatus);
+                            dialogsua.setMessage(Html.fromHtml(xoa));
+                            dialogsua.setPositiveButton("Tôi đã hiểu", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //lấy vị trí hiện tại
+                                }
+                            });
+                            dialogsua.show();
+                        }
+                    });
+                    //sự kiện button xóa
                     viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>"+model.getNameusecomment() + "</Strong></font> không";
+                            String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> không";
                             AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
                             dialogxoa.setTitle("Xóa bình luận");
                             dialogxoa.setIcon(R.drawable.ic_deletestatus);
@@ -179,6 +202,40 @@ public class CommentActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
         dialogwaching.dismiss();
+    }
+
+    //cập nhật bình luận
+    private void updatecomment(final String key, final Comment item) {
+        builder = new AlertDialog.Builder(CommentActivity.this);
+        builder.setTitle("Chỉnh sữa bình luận");
+        LayoutInflater layoutInflater = CommentActivity.this.getLayoutInflater();
+        final View updatecomment = layoutInflater.inflate(R.layout.item_edit_comment, null);
+        editsendcomment = (EditText) updatecomment.findViewById(R.id.editsendcomment);
+        builder.setView(updatecomment);
+        builder.setIcon(R.drawable.ic_editstatus);
+        editsendcomment.setText(item.getNamecomment());
+        final String name = Common.userten.getName();
+        final String image = Common.userten.getImage();
+        final long timecomment = new Date().getTime();
+        builder.setPositiveButton("Chỉnh sửa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //lấy vị trí hiện tại
+                item.setNameusecomment(name);
+                item.setImageusecomment(image);
+                item.setTimecomment(timecomment);
+                item.setNamecomment(editsendcomment.getText().toString());
+                commentlist.child(key).setValue(item);
+                Toast.makeText(CommentActivity.this, "Chỉnh sửa thành công !!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.show();
     }
 
     private void deletecomment(String key) {
