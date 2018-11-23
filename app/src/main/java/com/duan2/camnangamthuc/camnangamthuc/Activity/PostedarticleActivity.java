@@ -127,25 +127,6 @@ public class PostedarticleActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menutt, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_menutt) {
-            Intent intent = new Intent(PostedarticleActivity.this,HomeUsers.class);
-            startActivity(intent);
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     //đọc dữ liệu bai viết đã đăng
     private void loadliststatus(String statusEmail) {
         adapter = new FirebaseRecyclerAdapter<Community,ViewStatusHoder>(Community.class,R.layout.item_view_status,ViewStatusHoder.class,
