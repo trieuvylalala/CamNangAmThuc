@@ -44,8 +44,11 @@ import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -76,6 +79,7 @@ public class PostedarticleActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 7171;
     StorageReference storageReference;
     FirebaseStorage storage;
+    boolean like = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,10 +137,12 @@ public class PostedarticleActivity extends AppCompatActivity {
                 statuslist.orderByChild("emailusefood").equalTo(statusEmail)){//tìm kiếm : select * from Food where emailusefood
             @Override
             protected void populateViewHolder(ViewStatusHoder viewHolder, final Community model, final int position) {
+                final String keylike = getRef(position).getKey();
                 viewHolder.txtnamefoodstatus.setText(model.getNamefood());
                 viewHolder.txtnamefoodstatus.setMaxLines(1);
                 viewHolder.txtnamefoodstatus.setEllipsize(TextUtils.TruncateAt.END);
                 viewHolder.txtnamestatus.setText(model.getNameusefood());
+                viewHolder.likecountstatus.setText(Integer.toString(model.likecount));
                 viewHolder.txtngaydangstatus.setText(DateFormat.format("Đã đăng:"+"(HH:mm:ss) dd-MM-yyyy", model.getTimefood()));
                 viewHolder.statusview.setText(model.getStatusfood());
                 if(viewHolder.statusview.getText().toString().equalsIgnoreCase("Đang chờ phê duyệt")){
@@ -146,6 +152,7 @@ public class PostedarticleActivity extends AppCompatActivity {
                 }
                 Picasso.with(getBaseContext()).load(model.getImagefood()).into(viewHolder.imageviewstatus);
                 Glide.with(getApplicationContext()).load(model.getImageusefood()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imageusestatus);
+                viewHolder.setColorLike(keylike);
                 final Community community = model;
                 viewHolder.setItemListener(new ItemClickListerner() {
                     @Override
@@ -157,12 +164,55 @@ public class PostedarticleActivity extends AppCompatActivity {
                         startActivity(foodinfoIntent);
                     }
                 });
+                //sự kiện comment
+                viewHolder.commentfoodstatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent commentintent = new Intent(PostedarticleActivity.this,CommentActivity.class);
+                        Common.communityten = model;
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        commentintent.putExtra("commentId",adapter.getRef(position).getKey());
+                        startActivity(commentintent);
+                    }
+                });
+                //sự kiện like
+                viewHolder.likefoodstatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        statuslist.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(like){
+                                    int likecount =0;
+                                    if(dataSnapshot.child(keylike).hasChild(Common.userten.getId())){
+                                        statuslist.child(keylike).child(Common.userten.getId()).removeValue();
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        statuslist.child(model.getId()).child("likecount").setValue(likecount-1);
+                                        like = false;
+                                    }else {
+                                        statuslist.child(keylike).child(Common.userten.getId()).setValue("Like");
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        statuslist.child(keylike).child("likecount").setValue(likecount+1);
+                                        like = false;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                });
+                //sự kiện chỉnh sửa
                 viewHolder.editstatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         updatetstatus(adapter.getRef(position).getKey(),adapter.getItem(position));
                     }
                 });
+                //sự kiện xóa
                 viewHolder.deletestatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -57,7 +57,7 @@
         android:id="@+id/edit_comment"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/ic_editstatus"
+        android:background="@drawable/ic_edit_comment"
         android:layout_below="@+id/comment_test"/>
     <TextView
         android:id="@+id/comment_time"

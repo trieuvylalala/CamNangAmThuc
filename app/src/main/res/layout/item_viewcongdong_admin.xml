@@ -44,7 +44,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:weightSum="10"
+            android:weightSum="11"
             >
             <ImageView
                 android:layout_width="0dp"
@@ -52,6 +52,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_like_food"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/textusecomment"
+                android:shadowColor="@color/colorTextName"
+                android:text="like"
+                android:textSize="17dp"
+                android:shadowDx="-2"
+                android:shadowDy="-2"
+                android:id="@+id/likecountadmin"
+                android:shadowRadius="2"
+                android:textStyle="bold" />
             <ImageView
                 android:id="@+id/commentfoodstatusadmin"
                 android:layout_width="0dp"
@@ -62,7 +76,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
+                android:layout_weight="7"
                 android:id="@+id/txtnamefoodstatusadmin"
                 android:textColor="@color/colorPrimary"
                 android:shadowColor="@color/colorTextName"

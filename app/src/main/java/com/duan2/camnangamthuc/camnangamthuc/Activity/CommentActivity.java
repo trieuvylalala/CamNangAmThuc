@@ -106,6 +106,8 @@ public class CommentActivity extends AppCompatActivity {
                 viewHolder.comment_time.setText(DateFormat.format("(HH:mm:ss) dd-MM-yyyy", model.getTimecomment()));
                 Glide.with(getApplicationContext()).load(model.getImageusecomment()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imgcomment);
                 final Comment comment = model;
+                viewHolder.detele_comment.setVisibility(View.INVISIBLE);
+                viewHolder.edit_comment.setVisibility(View.INVISIBLE);
                 //nếu như email của tài khoản giống với email của bình luận thì sẽ hiễn thị 2 chức năng xóa và sửa
                 if (Common.userten.getEmail().equals(model.getEmailusecomment())) {
                     viewHolder.detele_comment.setVisibility(View.VISIBLE);
@@ -143,58 +145,158 @@ public class CommentActivity extends AppCompatActivity {
                             dialogxoa.show();
                         }
                     });
-                    //ngược lại email của tài khoản không giống với email của bình luận thì sẽ ẩn 2 chức năng xóa và sửa
-                } else {
-                    viewHolder.detele_comment.setVisibility(View.INVISIBLE);
-                    viewHolder.edit_comment.setVisibility(View.INVISIBLE);
                 }
                 //nếu như email của tài khoản giống với email của bài viết thì sẽ hiễn thị 2 chức năng xóa và sửa
                 if (Common.userten.getEmail().equals(Common.communityten.getEmailusefood())) {
                     viewHolder.detele_comment.setVisibility(View.VISIBLE);
-                    viewHolder.edit_comment.setVisibility(View.VISIBLE);
-                    //sự kiện button sửa
-                    viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            String xoa = "Bạn bạn không thể sửa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> ";
-                            AlertDialog.Builder dialogsua = new AlertDialog.Builder(CommentActivity.this);
-                            dialogsua.setTitle("Sửa bình luận");
-                            dialogsua.setIcon(R.drawable.ic_editstatus);
-                            dialogsua.setMessage(Html.fromHtml(xoa));
-                            dialogsua.setPositiveButton("Tôi đã hiểu", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //lấy vị trí hiện tại
-                                }
-                            });
-                            dialogsua.show();
-                        }
-                    });
-                    //sự kiện button xóa
-                    viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> không";
-                            AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
-                            dialogxoa.setTitle("Xóa bình luận");
-                            dialogxoa.setIcon(R.drawable.ic_deletestatus);
-                            dialogxoa.setMessage(Html.fromHtml(xoa));
-                            dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //lấy vị trí hiện tại
-                                    deletecomment(adapter.getRef(position).getKey());
-                                }
-                            });
-                            dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (Common.userten.getEmail().equals(model.getEmailusecomment())) {
+                        viewHolder.detele_comment.setVisibility(View.VISIBLE);
+                        viewHolder.edit_comment.setVisibility(View.VISIBLE);
+                        //button sửa
+                        viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                updatecomment(adapter.getRef(position).getKey(), adapter.getItem(position));
+                            }
+                        });
 
-                                }
-                            });
-                            dialogxoa.show();
-                        }
-                    });
+                        //buttom xóa
+                        viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + "mình" + "</Strong></font> không";
+                                AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
+                                dialogxoa.setTitle("Xóa bình luận");
+                                dialogxoa.setIcon(R.drawable.ic_deletestatus);
+                                dialogxoa.setMessage(Html.fromHtml(xoa));
+                                dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //lấy vị trí hiện tại
+                                        deletecomment(adapter.getRef(position).getKey());
+                                    }
+                                });
+                                dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                dialogxoa.show();
+                            }
+                        });
+                        //ngược lại email của tài khoản không giống với email của bình luận thì sẽ ẩn 2 chức năng xóa và sửa
+                    } else {
+                        viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> không";
+                                AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
+                                dialogxoa.setTitle("Xóa bình luận");
+                                dialogxoa.setIcon(R.drawable.ic_deletestatus);
+                                dialogxoa.setMessage(Html.fromHtml(xoa));
+                                dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //lấy vị trí hiện tại
+                                        deletecomment(adapter.getRef(position).getKey());
+                                    }
+                                });
+                                dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                dialogxoa.show();
+                            }
+                        });
+                    }
+                }
+                //nếu thông tin so sánh bằng admin
+                if(Common.userten.getRole().equalsIgnoreCase("admin")){
+                    viewHolder.detele_comment.setVisibility(View.VISIBLE);
+                    viewHolder.edit_comment.setVisibility(View.VISIBLE);
+                    //truyền vào nếu email của tài khoản giống với emial của bình luận thì xóa sửa
+                    if (Common.userten.getEmail().equals(model.getEmailusecomment())) {
+                        //sửa
+                        viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                updatecomment(adapter.getRef(position).getKey(), adapter.getItem(position));
+                            }
+                        });
+                        //xóa
+                        viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + "mình" + "</Strong></font> không";
+                                AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
+                                dialogxoa.setTitle("Xóa bình luận");
+                                dialogxoa.setIcon(R.drawable.ic_deletestatus);
+                                dialogxoa.setMessage(Html.fromHtml(xoa));
+                                dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //lấy vị trí hiện tại
+                                        deletecomment(adapter.getRef(position).getKey());
+                                    }
+                                });
+                                dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                dialogxoa.show();
+                            }
+                        });
+                        //ngược lại chỉ có quyền xóa k có quyền sữa
+                    }else {
+                        //sửa
+                        viewHolder.edit_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String xoa = "Bạn bạn không thể sửa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> vì đây là quyền riêng tư";
+                                AlertDialog.Builder dialogsua = new AlertDialog.Builder(CommentActivity.this);
+                                dialogsua.setTitle("Sửa bình luận");
+                                dialogsua.setIcon(R.drawable.ic_edit_comment);
+                                dialogsua.setMessage(Html.fromHtml(xoa));
+                                dialogsua.setPositiveButton("Tôi đã hiểu", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //lấy vị trí hiện tại
+                                    }
+                                });
+                                dialogsua.show();
+                            }
+                        });
+                        //xóa
+                        viewHolder.detele_comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String xoa = "Bạn có muốn xóa bình luận của <font color='green'> <Strong>" + model.getNameusecomment() + "</Strong></font> không";
+                                AlertDialog.Builder dialogxoa = new AlertDialog.Builder(CommentActivity.this);
+                                dialogxoa.setTitle("Xóa bình luận");
+                                dialogxoa.setIcon(R.drawable.ic_deletestatus);
+                                dialogxoa.setMessage(Html.fromHtml(xoa));
+                                dialogxoa.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        //lấy vị trí hiện tại
+                                        deletecomment(adapter.getRef(position).getKey());
+                                    }
+                                });
+                                dialogxoa.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                dialogxoa.show();
+                            }
+                        });
+                    }
                 }
             }
         };
@@ -212,7 +314,7 @@ public class CommentActivity extends AppCompatActivity {
         final View updatecomment = layoutInflater.inflate(R.layout.item_edit_comment, null);
         editsendcomment = (EditText) updatecomment.findViewById(R.id.editsendcomment);
         builder.setView(updatecomment);
-        builder.setIcon(R.drawable.ic_editstatus);
+        builder.setIcon(R.drawable.ic_edit_comment);
         editsendcomment.setText(item.getNamecomment());
         final String name = Common.userten.getName();
         final String image = Common.userten.getImage();

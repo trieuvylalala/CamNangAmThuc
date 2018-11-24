@@ -53,8 +53,11 @@ import com.duan2.camnangamthuc.camnangamthuc.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -92,6 +95,7 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     FirebaseRecyclerAdapter<Community,ViewStatusAdmin> adapter;
+    boolean like = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,13 +230,16 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
                 congdonglist.orderByChild("statusfood").equalTo(statusfood)){//tìm kiếm : select * from Food where emailusefood
             @Override
             protected void populateViewHolder(ViewStatusAdmin viewHolder, final Community model, final int position) {
+                final String keylike = getRef(position).getKey();
                 viewHolder.txtnamefoodstatusadmin.setText(model.getNamefood());
                 viewHolder.txtnamefoodstatusadmin.setMaxLines(1);
                 viewHolder.txtnamefoodstatusadmin.setEllipsize(TextUtils.TruncateAt.END);
                 viewHolder.txtnamestatusadmin.setText(model.getNameusefood());
+                viewHolder.likecountadmin.setText(Integer.toString(model.likecount));
                 viewHolder.txtngaydangstatusadmin.setText(DateFormat.format("Đã đăng:"+"(HH:mm:ss) dd-MM-yyyy", model.getTimefood()));
                 Picasso.with(getBaseContext()).load(model.getImagefood()).into(viewHolder.imageviewstatusadmin);
                 Glide.with(getApplicationContext()).load(model.getImageusefood()).apply(RequestOptions.circleCropTransform()).into(viewHolder.imageusestatusadmin);
+                viewHolder.setColorLike(keylike);
                 final Community community = model;
                 viewHolder.setItemListener(new ItemClickListerner() {
                     @Override
@@ -267,6 +274,46 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
                         });
                         dialogxoa.show();
 
+                    }
+                });
+                viewHolder.commentfoodstatusadmin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent commentintent = new Intent(CommunityAdminActivity.this,CommentActivity.class);
+                        Common.communityten = model;
+                        //lấy id của Category là key,vì vậy lấy key để chỉ item
+                        commentintent.putExtra("commentId",adapter.getRef(position).getKey());
+                        startActivity(commentintent);
+                    }
+                });
+                viewHolder.likefoodstatusadmin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        like = true;
+                        congdonglist.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(like){
+                                    int likecount =0;
+                                    if(dataSnapshot.child(keylike).hasChild(Common.userten.getId())){
+                                        congdonglist.child(keylike).child(Common.userten.getId()).removeValue();
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        congdonglist.child(model.getId()).child("likecount").setValue(likecount-1);
+                                        like = false;
+                                    }else {
+                                        congdonglist.child(keylike).child(Common.userten.getId()).setValue("Like");
+                                        likecount = dataSnapshot.child(keylike).child("likecount").getValue(Integer.class);
+                                        congdonglist.child(keylike).child("likecount").setValue(likecount+1);
+                                        like = false;
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }
