@@ -179,6 +179,7 @@ public class PostedarticleActivity extends AppCompatActivity {
                 viewHolder.likefoodstatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        like = true;
                         statuslist.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

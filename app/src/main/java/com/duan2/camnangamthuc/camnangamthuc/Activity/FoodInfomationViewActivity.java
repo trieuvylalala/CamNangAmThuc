@@ -29,6 +29,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -36,6 +37,7 @@ import com.duan2.camnangamthuc.camnangamthuc.Model.CheckInternet;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.FoodInfomation;
 import com.duan2.camnangamthuc.camnangamthuc.R;
+import com.duan2.camnangamthuc.camnangamthuc.SQLiteDatabase.SQLiteHandler;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareContent;
@@ -71,6 +73,7 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
     com.getbase.floatingactionbutton.FloatingActionButton fab_dow, fab_face, fab_share;
     CallbackManager callbackManager;
     ShareDialog shareDialog;
+    private SQLiteHandler db;
     Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -98,6 +101,7 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_food_infomation_view);
+        db = new SQLiteHandler(getApplicationContext());
         database = FirebaseDatabase.getInstance();
         //Bọc dữ liệu Json
         foodInfomationviewlist = database.getReference("FoodInfomation");
@@ -200,6 +204,14 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
                         startActivity(Intent.createChooser(sendIntent, "Chia sẽ bài viết..."));
                     }
                 });
+                fab_dow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        db.addDow(foodInfomation.getName(),foodInfomation.getImage(),foodInfomation.getImageView(),foodInfomation.
+                                getInfomation(),foodInfomation.getInfomationView(),foodInfomation.getHappy());
+                        Toast.makeText(FoodInfomationViewActivity.this, "Đã tải về máy", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 pDialog.dismiss();
             }
 
@@ -223,12 +235,9 @@ public class FoodInfomationViewActivity extends AppCompatActivity {
         // Store image to default external storage directory
         Uri bmpUri = null;
         try {
-            // Use methods on Context to access package-specific directories on external storage.
-            // This way, you don't need to request external read/write permission.
-            // See https://youtu.be/5xVh-7ywKpE?t=25m25s
-            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png"+".jpeg");
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
             FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG.JPEG, 90, out);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
             // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
             bmpUri = Uri.fromFile(file);

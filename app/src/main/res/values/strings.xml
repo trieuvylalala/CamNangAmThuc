@@ -58,4 +58,16 @@
         <item>Đã phê duyệt</item>
     </array>
     <string name="comment">Viết bình luận...</string>
+    <string name="dow">Bài viết tải về</string>
+    <string name="sotay">Sổ tay đi chợ</string>
+    <string name="listshopping">Danh sách đi chợ</string>
+    <string name="luutru">Lưu trữ</string>
+    <string name="luulai">Lưu lại</string>
+    <string name="dong">Đóng</string>
+    <string name="them">Thêm mới</string>
+    <string name="tieude">Tiêu đề</string>
+    <string name="noidung">Nội dung</string>
+    <string name="capnhat">Cập nhật</string>
+    <string name="huongdan">Hướng dẫn</string>
+    <string name="danhdau">Bài viết đã đánh dấu</string>
 </resources>

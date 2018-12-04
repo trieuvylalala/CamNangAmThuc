@@ -268,7 +268,11 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
             });
             return true;
         }
-
+        if (id == R.id.action_folder) {
+            Intent intent = new Intent(HomeUsers.this,ViewListShopping.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -337,9 +341,7 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                                 reference.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                            postSnapshot.getValue(Users.class);
-                                                reference.child(postSnapshot.getKey()).updateChildren(doimatkhau)
+                                                reference.child(Common.userten.getId()).updateChildren(doimatkhau)
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
@@ -353,7 +355,6 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                                                         Toast.makeText(HomeUsers.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
-                                            }
                                     }
 
                                     @Override
@@ -379,8 +380,20 @@ public class HomeUsers extends AppCompatActivity  implements NavigationView.OnNa
                 status.putExtra("StatusEmail", Common.userten.getEmail());
                 startActivity(status);
                 break;
+            case 3:
+                Intent favorite = new Intent(HomeUsers.this,FavoriteViewActivity.class);
+                startActivity(favorite);
+                break;
             case 5:
                 sendEmail();
+                break;
+            case 4:
+                Intent intent2 = new Intent(HomeUsers.this, ViewDownload.class);
+                startActivity(intent2);
+                break;
+            case 6:
+                Intent intent3 = new Intent(HomeUsers.this, GuideViewActivity.class);
+                startActivity(intent3);
                 break;
             case 7:
                 Paper.book().destroy();

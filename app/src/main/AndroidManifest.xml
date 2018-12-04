@@ -50,7 +50,16 @@
         <activity android:name=".Activity.ViewPosterActivity" />
         <activity android:name=".Activity.CommunityAdminActivity" />
         <activity android:name=".Activity.StatusApprovedActivity" />
-        <activity android:name=".Activity.CommentActivity"></activity>
+        <activity android:name=".Activity.CommentActivity" />
+        <activity android:name=".Activity.ViewDownload" />
+        <activity android:name=".Activity.ViewDownloadDetail" />
+        <activity android:name=".Activity.ViewListShopping" />
+        <activity android:name=".Activity.AddlistShoppingActivity" />
+        <activity android:name=".Activity.UpdateListShoppingActivity" />
+        <activity android:name=".Activity.InformationViewListShopping" />
+        <activity android:name=".Activity.ViewListStogare" />
+        <activity android:name=".Activity.GuideViewActivity" />
+        <activity android:name=".Activity.FavoriteViewActivity"></activity>
     </application>
 
 </manifest>

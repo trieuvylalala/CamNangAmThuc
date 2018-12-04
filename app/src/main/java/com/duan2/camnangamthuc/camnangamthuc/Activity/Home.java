@@ -102,8 +102,6 @@ public class Home extends AppCompatActivity
         //khai báo listview menu
         loginIon = BitmapFactory.decodeResource(this.getResources(),R.drawable.login);
         listArray.add(new MenuHome("Đăng nhập tài khoảng",loginIon));
-        xemdanhgiaIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.danhgia);
-        listArray.add(new MenuHome("Xem đánh dấu",xemdanhgiaIcon));
         xemtaiveIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.taive);
         listArray.add(new MenuHome("Xem tải về",xemtaiveIcon));
         gopyIcon = BitmapFactory.decodeResource(this.getResources(),R.drawable.icongmail);
@@ -298,6 +296,11 @@ public class Home extends AppCompatActivity
             });
             return true;
         }
+        if (id == R.id.action_folder) {
+            Intent intent = new Intent(Home.this,ViewListShopping.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -340,13 +343,15 @@ public class Home extends AppCompatActivity
                 startActivity(intent);
                 break;
             case 1:
-               /* Intent intent2 = new Intent(ChemGioActiviti.this, HuCauActiviti.class);
-                startActivity(intent2);*/
+                Intent intent2 = new Intent(Home.this, ViewDownload.class);
+                startActivity(intent2);
                 break;
             case 2:
+                sendEmail();
                 break;
             case 3:
-                sendEmail();
+                Intent intent3 = new Intent(Home.this, GuideViewActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

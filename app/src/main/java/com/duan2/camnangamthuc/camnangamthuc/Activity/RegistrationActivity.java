@@ -104,13 +104,6 @@ public class RegistrationActivity extends AppCompatActivity {
         btnRegister =(Button) findViewById(R.id.btnRegister);
         imgAvatar = (CircleImageView) findViewById(R.id.imgAvatar);
         iconphoto = (ImageView) findViewById(R.id.iconphoto);
-        editpass.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                editpass.setInputType(InputType.TYPE_CLASS_TEXT);
-                return false;
-            }
-        });
         iconphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

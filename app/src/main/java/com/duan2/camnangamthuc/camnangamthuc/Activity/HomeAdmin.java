@@ -254,6 +254,11 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
             });
             return true;
         }
+        if (id == R.id.action_folder) {
+            Intent intent = new Intent(HomeAdmin.this,ViewListShopping.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -288,6 +293,10 @@ public class HomeAdmin extends AppCompatActivity  implements NavigationView.OnNa
             case 4:
                 Intent approved = new Intent(HomeAdmin.this,StatusApprovedActivity.class);
                 startActivity(approved);
+                break;
+            case 5:
+                Intent intent2 = new Intent(HomeAdmin.this, ViewDownload.class);
+                startActivity(intent2);
                 break;
             case 6:
                 Paper.book().destroy();

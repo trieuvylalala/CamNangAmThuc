@@ -475,7 +475,11 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
             });
             return true;
         }
-
+        if (id == R.id.action_folder) {
+            Intent intent = new Intent(CommunityUserActivity.this,ViewListShopping.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -586,8 +590,20 @@ public class CommunityUserActivity extends AppCompatActivity implements Navigati
                 status.putExtra("StatusEmail", Common.userten.getEmail());
                 startActivity(status);
                 break;
+            case 3:
+                Intent favorite = new Intent(CommunityUserActivity.this,FavoriteViewActivity.class);
+                startActivity(favorite);
+                break;
+            case 4:
+                Intent intent2 = new Intent(CommunityUserActivity.this, ViewDownload.class);
+                startActivity(intent2);
+                break;
             case 5:
                 sendEmail();
+                break;
+            case 6:
+                Intent intent3 = new Intent(CommunityUserActivity.this, GuideViewActivity.class);
+                startActivity(intent3);
                 break;
             case 7:
                 Paper.book().destroy();

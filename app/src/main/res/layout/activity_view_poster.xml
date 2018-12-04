@@ -148,36 +148,15 @@
             </LinearLayout>
         </ScrollView>
     </android.support.v4.widget.NestedScrollView>
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        app:menu_buttonSpacing="0dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        app:fab_addButtonColorNormal="#ff0000"
-        app:menu_icon="@drawable/fab_add"
-        app:fab_labelsPosition="left"
-        app:menu_shadowRadius="4dp"
-        app:menu_shadowColor="#66aff198"
-        app:menu_shadowXOffset="1dp"
-        app:menu_shadowYOffset="1dp"
-        >
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_dowviewposter"
-            android:src="@drawable/ic_dow"
-            app:fab_size="mini"
-            android:backgroundTint="#ff1a75" />
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_shareviewposter"
-            android:src="@drawable/ic_share"
-            android:backgroundTint="#e67300"
-            app:fab_size="mini" />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+ <android.support.design.widget.FloatingActionButton
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_alignParentEnd="true"
+     android:layout_alignParentBottom="true"
+     android:layout_margin="15dp"
+     app:fabSize="mini"
+     android:backgroundTint="@color/backgrountsen"
+     android:id="@+id/fabchecklike"
+     android:src="@drawable/ic_check_black_24dp"
+     />
 </RelativeLayout>

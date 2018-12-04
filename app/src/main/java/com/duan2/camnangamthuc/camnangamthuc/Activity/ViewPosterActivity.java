@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,6 +32,7 @@ import com.duan2.camnangamthuc.camnangamthuc.Model.Common;
 import com.duan2.camnangamthuc.camnangamthuc.Model.Community;
 import com.duan2.camnangamthuc.camnangamthuc.Model.FoodInfomation;
 import com.duan2.camnangamthuc.camnangamthuc.R;
+import com.duan2.camnangamthuc.camnangamthuc.SQLiteDatabase.SQLiteHandler;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,7 +58,8 @@ public class ViewPosterActivity extends AppCompatActivity {
     DatabaseReference viewcommnitylist;
     ProgressDialog pDialog;
     AlertDialog dialogwaching;
-    com.getbase.floatingactionbutton.FloatingActionButton fab_dowviewposter, fab_shareviewposter;
+   FloatingActionButton fabchecklike;
+    private SQLiteHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,7 @@ public class ViewPosterActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar_viewposte);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        db = new SQLiteHandler(getApplicationContext());
         txttenviewposte = (TextView) findViewById(R.id.txttenviewposte);
         txtviewtextnguyenlieu = (TextView) findViewById(R.id.txtviewtextnguyenlieu);
         txtnguyenlieuviewposte = (TextView) findViewById(R.id.txtnguyenlieuviewposte);
@@ -76,8 +82,7 @@ public class ViewPosterActivity extends AppCompatActivity {
         imgageviewposter = (ImageView) findViewById(R.id.imgageviewposter);
         imguseviewposte = (CircleImageView) findViewById(R.id.imguseviewposte);
         imgviewpostetoobar = (CircleImageView) findViewById(R.id.imgviewpostetoobar);
-        fab_dowviewposter = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_dowviewposter);
-        fab_shareviewposter = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_shareviewposter);
+        fabchecklike = (FloatingActionButton) findViewById(R.id.fabchecklike);
         if (CheckInternet.haveNetworkConnection(this)){
             //load dialog
             dialogwaching = new SpotsDialog(ViewPosterActivity.this);
@@ -122,22 +127,26 @@ public class ViewPosterActivity extends AppCompatActivity {
                 toolbar_title_viewposte.setText(Common.communityten.getNamefood());
                 toolbar_title_viewposte.setSingleLine(true);;
                 toolbar_title_viewposte.setEllipsize(TextUtils.TruncateAt.END);
-                fab_shareviewposter.setOnClickListener(new View.OnClickListener() {
+                dialogwaching.dismiss();
+                if(db.isfavorite(community.getId())){
+                    fabchecklike.setImageResource(R.drawable.ic_check_view_24dp);
+                }
+                fabchecklike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, txttenviewposte.getText().toString());
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, txtnguyenlieuviewposte.getText().toString());
-                        Uri bmpUri = getLocalBitmapUri(imgageviewposter);
-                        sendIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-                        sendIntent.setType("image/*");
-                        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                        startActivity(Intent.createChooser(sendIntent, "Chia sẽ bài viết..."));
+                        if(!db.isfavorite(community.getId())){
+                            db.addtofavorite(community.getId(),community.getNamefood(),community.getImagefood(),
+                                    community.getResourcesfood(),community.getRecipefood(),community.getNameusefood(),
+                                    community.getEmailusefood(),community.getImageusefood(),community.getTimefood());
+                            fabchecklike.setImageResource(R.drawable.ic_check_view_24dp);
+                            Toast.makeText(ViewPosterActivity.this, "Đã đánh dấu", Toast.LENGTH_SHORT).show();
+                        }else {
+                            db.deletefavorite(community.getId());
+                            fabchecklike.setImageResource(R.drawable.ic_check_black_24dp);
+                            Toast.makeText(ViewPosterActivity.this, "Đã hủy đánh dấu", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-                dialogwaching.dismiss();
             }
 
             @Override
@@ -146,33 +155,6 @@ public class ViewPosterActivity extends AppCompatActivity {
             }
         });
 
-    }
-    //lấy đường dẫn hình ảnh đưa vào bitmap
-    public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
-        Drawable drawable = imageView.getDrawable();
-        Bitmap bmp = null;
-        if (drawable instanceof BitmapDrawable){
-            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        } else {
-            return null;
-        }
-        // Store image to default external storage directory
-        Uri bmpUri = null;
-        try {
-            // Use methods on Context to access package-specific directories on external storage.
-            // This way, you don't need to request external read/write permission.
-            // See https://youtu.be/5xVh-7ywKpE?t=25m25s
-            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png"+".jpeg");
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG.JPEG, 90, out);
-            out.close();
-            // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
-            bmpUri = Uri.fromFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bmpUri;
     }
 
     private void ChayToolBar() {

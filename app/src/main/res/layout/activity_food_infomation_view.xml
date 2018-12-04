@@ -43,9 +43,6 @@
         android:clipToPadding="false"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -104,7 +101,6 @@
                 android:layout_marginBottom="30dp"
                />
         </LinearLayout>
-        </ScrollView>
     </android.support.v4.widget.NestedScrollView>
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_width="wrap_content"

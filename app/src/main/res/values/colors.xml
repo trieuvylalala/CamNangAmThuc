@@ -10,7 +10,7 @@
     <color name="white">#f1efef</color>
     <color name="colortext">#000</color>
     <color name="colorbackgrou_show_reacy">#00000000</color>
-    <color name="text_while">#FFF</color>
+    <color name="text_while">#ffffff</color>
     <color name="bg_dangky">#ea4c88</color>
     <color name="bgchonanh">#42D752</color>
     <color name="bgre">#ff6861</color>
@@ -23,4 +23,6 @@
     <color name="backgrountsen">#FF4081</color>
     <color name="textusecomment">#2727b7</color>
     <color name="tinsend">#9C9C9C</color>
+    <color name="backgroudlistshpoping">#26ae90</color>
+    <color name="textlist">#006DF0</color>
 </resources>

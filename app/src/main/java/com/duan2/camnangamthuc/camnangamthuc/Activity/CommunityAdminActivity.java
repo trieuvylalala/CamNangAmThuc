@@ -491,6 +491,11 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
             });
             return true;
         }
+        if (id == R.id.action_folder) {
+            Intent intent = new Intent(CommunityAdminActivity.this,ViewListShopping.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -525,6 +530,10 @@ public class CommunityAdminActivity extends AppCompatActivity implements Navigat
             case 4:
                 Intent approved = new Intent(CommunityAdminActivity.this,StatusApprovedActivity.class);
                 startActivity(approved);
+                break;
+            case 5:
+                Intent intent2 = new Intent(CommunityAdminActivity.this, ViewDownload.class);
+                startActivity(intent2);
                 break;
             case 6:
                 Paper.book().destroy();
